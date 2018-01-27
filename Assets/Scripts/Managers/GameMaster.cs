@@ -2,6 +2,11 @@
 using UnityEngine.UI;
 using System.Collections;
 
+public enum GameScene {
+    Null = 0,
+    Level = 2
+}
+
 public class GameMaster : MonoBehaviour {
 
     #region Singleton
@@ -50,7 +55,9 @@ public class GameMaster : MonoBehaviour {
     public static readonly float MinimumHomeDistance = 3.0f;
     [SerializeField]
     public static readonly float RoadMaxLength = 7.0f;
+
     public int[] RoadCapacityPerLevel;
+    public float[] MailRangePerLevel;
 
     public bool useScreenLogger = true;
 
@@ -59,12 +66,15 @@ public class GameMaster : MonoBehaviour {
     // Use this for initialization
     void Awake() {
         ScreenLogger = GameObject.Find("ScreenLogger").GetComponent<Text>();
+        GameScene = GameScene.Level;
     }
 
     // Update is called once per frame
     void Update() {
 
     }
+
+    public GameScene GameScene = GameScene.Null;
 
     public string ScreenLoggerHeader = "DEBUG:\n";
 
@@ -74,6 +84,14 @@ public class GameMaster : MonoBehaviour {
             ScreenLogger.text = ScreenLoggerHeader + any.ToString();
         } else {
             Debug.Log(any);
+        }
+    }
+
+    public LevelController GetLevelController() {
+        if(GameScene == GameScene.Level) {
+            return GameObject.Find("LevelController").GetComponent<LevelController>();
+        } else {
+            return null;
         }
     }
 }

@@ -104,12 +104,15 @@ public class LevelController : MonoBehaviour {
         RoadList = new List<Road>();
         StationList = new List<Station>();
         HomeList = new List<Station>();
+        MailList = new List<Mail>();
     }
 
     // Object management
     public List<Road> RoadList;
     public List<Station> StationList;
     public List<Station> HomeList;
+
+    public List<Mail> MailList;
 
     // Build
     // Station
@@ -126,6 +129,7 @@ public class LevelController : MonoBehaviour {
             StationList.Add(station);
 
             //TODO: Manage animator
+            UpdateIdleMailTargetStation();
         } else {
             //TODO: Build error
         }
@@ -171,6 +175,13 @@ public class LevelController : MonoBehaviour {
 
     private void Start() {
         InitializeLevel();
+
+        Bound = new Vector2(MapObject.GetComponent<Renderer>().bounds.size.x / 2, MapObject.GetComponent<Renderer>().bounds.size.y / 2);
+
+        //DEBUG
+        CreateMailArea(new Vector2(1f, 1f), Bound);
+        CreateMailArea(new Vector2(-3f, -3f), Bound);
+        CreateMailArea(new Vector2(6f, -4f), Bound);
     }
 
     private void Update() {
@@ -246,6 +257,25 @@ public class LevelController : MonoBehaviour {
                     Debug.DrawLine(startPos, (endPos - startPos).normalized + startPos, Color.red);
                 }
             }
+        }
+    }
+
+    public GameObject MapObject;
+    public GameObject MailArea;
+    public List<GameObject> MailAreas = new List<GameObject>();
+
+    public Vector2 Bound;
+
+    public void CreateMailArea(Vector2 initPos, Vector2 bound) {
+        GameObject area = Instantiate(MailArea);
+        area.GetComponent<MailArea>().AreaInit(initPos, bound);
+
+        MailAreas.Add(area);
+    }
+
+    public void UpdateIdleMailTargetStation() {
+        foreach(var mail in MailList) {
+            mail.UpdateTargetStation();
         }
     }
 }

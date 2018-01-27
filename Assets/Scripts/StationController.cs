@@ -22,6 +22,14 @@ public class Station {
             return GameMaster.Instance.RoadCapacityPerLevel[limitedLevel];
         }
     }
+    public float MailRange {
+        get {
+            int limitedLevel = Mathf.Min(GameMaster.Instance.MailRangePerLevel.Length - 1, level);
+            return GameMaster.Instance.MailRangePerLevel[limitedLevel];
+        }
+    }
+
+
     public List<Road> RoadList;
     public Dictionary<Station, Road> NeighbourStationList;
 
