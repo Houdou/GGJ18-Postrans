@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4003881674280546}
   - component: {fileID: 212286384644139506}
+  - component: {fileID: 95041874904828650}
   m_Layer: 0
   m_Name: Marker
   m_TagString: Untagged
@@ -72,6 +73,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &95041874904828650
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1634348064317490}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e3de6624eca55324395a13411b63bd19, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!95 &95839831851871014
 Animator:
   serializedVersion: 3
@@ -81,7 +99,7 @@ Animator:
   m_GameObject: {fileID: 1745575451455834}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 06ab8d1b87ef5a949b21e0ca7908c6e9, type: 2}
+  m_Controller: {fileID: 9100000, guid: e3de6624eca55324395a13411b63bd19, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

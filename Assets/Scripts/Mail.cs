@@ -80,6 +80,8 @@ public class Mail : MonoBehaviour {
     }
 
     public void MoveTowards(Station from, Road road) {
+        Popup();
+
         // TODO: Show up
         IsTravelling = true;
         TravellingRoad = road;
@@ -111,6 +113,8 @@ public class Mail : MonoBehaviour {
 
     public void CheckAcceptance(Station station) {
         if(Vector2.Distance(transform.position, station.Pos) < 0.3f) {
+            FadeOut();
+
             if(station.ID == TargetHome.ID) {
                 // Arrival
             } else {
@@ -132,6 +136,16 @@ public class Mail : MonoBehaviour {
                 }
             }
         }
+    }
+
+    public void FadeOut() {
+        GetComponent<Animator>().SetBool("Arrive", true);
+        transform.Find("Marker").GetComponent<Animator>().SetBool("Arrive", true);
+    }
+
+    public void Popup() {
+        GetComponent<Animator>().SetBool("Popup", true);
+        transform.Find("Marker").GetComponent<Animator>().SetBool("Popup", true);
     }
 }
 
