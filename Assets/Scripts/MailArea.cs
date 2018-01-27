@@ -19,6 +19,12 @@ public class MailArea : MonoBehaviour {
     private float releaseHold = 5f;
     private bool gernerateMail = true;
 
+    private LevelController lc;
+
+    private void Awake() {
+        lc = GameMaster.Instance.GetLevelController();
+    }
+
     // Use this for initialization
     void Start() {
     }
@@ -116,8 +122,9 @@ public class MailArea : MonoBehaviour {
     void CreateNewMail(Vector2 initPos, GameObject mailPrefab) {
         GameObject newMail = Instantiate(mailPrefab);
         Mail mail = newMail.GetComponent<Mail>();
-        mail.MailInit(initPos);
-
+        
+        mail.Initialize(initPos, Random.Range(0, lc.HomeList.Count));
+        
         mailList.Add(newMail);
         GameMaster.Instance.GetLevelController().MailList.Add(mail);
     }
