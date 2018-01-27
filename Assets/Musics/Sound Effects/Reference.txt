@@ -1,5 +1,5 @@
 New mail: http://web.vtc.edu/mt/102spr01/Projects/CLAGG/Examples/Chomp/bubble.wav
-Countdown:  http://www.wavlist.com/soundfx/020/clock-tick2.wav
+Clock:  http://osabisi.sakura.ne.jp/m2/
 Click: http://www.muppetlabs.com/~breadbox/software/tworld/wav/click.wav
 Coin: http://www.pacdv.com/sounds/mechanical_sound_effects/coins_2.wav
 Upgrade Station http://www.daverudolf.com/audio/building.wav
