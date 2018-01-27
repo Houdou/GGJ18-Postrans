@@ -115,8 +115,10 @@ public class Station {
 
         Queue<Station> searchList = new Queue<Station>();
         foreach(var station in NeighbourStationList.Keys) {
-            searchList.Enqueue(station);
-            PrevStationDict[station] = this;
+            if(!station.searchMark) {
+                searchList.Enqueue(station);
+                PrevStationDict[station] = this;
+            }
         }
 
         while(searchList.Count > 0) {
@@ -170,7 +172,7 @@ public class Station {
 
             if(NavigationDict[mail.TargetHome] == null) {
                 // Target not accessible
-                MailStorage.Enqueue(mail);
+                OverflowMailQueue.Enqueue(mail);
             } else {
                 mail.MoveTowards(this, NavigationDict[mail.TargetHome]);
             }

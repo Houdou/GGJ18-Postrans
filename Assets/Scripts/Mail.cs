@@ -139,13 +139,13 @@ public class Mail : MonoBehaviour {
     }
 
     public void FadeOut() {
-        GetComponent<Animator>().SetBool("Arrive", true);
-        transform.Find("Marker").GetComponent<Animator>().SetBool("Arrive", true);
+        GetComponent<Animator>().SetTrigger("Arrive");
+        transform.Find("Marker").GetComponent<Animator>().SetTrigger("Arrive");
     }
 
     public void Popup() {
-        GetComponent<Animator>().SetBool("Popup", true);
-        transform.Find("Marker").GetComponent<Animator>().SetBool("Popup", true);
+        GetComponent<Animator>().SetTrigger("Popup");
+        transform.Find("Marker").GetComponent<Animator>().SetTrigger("Popup");
     }
 }
 
