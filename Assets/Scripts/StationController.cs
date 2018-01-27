@@ -36,11 +36,11 @@ public class Station {
 
     public int level { get; private set; }
     
-    public int UpgradeStation() {
+    public void UpgradeStation() {
         if(level < GameMaster.MaxStationLevel) {
             level += 1;
         }
-        return level;
+        station.GetComponent<StationController>().UpgradeStation(level);
     }
 
     public Station(GameObject obj, bool isHome) {
@@ -187,6 +187,8 @@ public class StationController : MonoBehaviour {
     public Station model;
     public SpriteRenderer sprite;
 
+    public Color TargetColor;
+
     public bool isInitialized;
     public int ID;
     
@@ -199,6 +201,13 @@ public class StationController : MonoBehaviour {
         model = new Station(gameObject, isHome);
         ID = model.ID;
 
+        if(!isHome) {
+            TargetColor = sprite.color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
+            Invoke("SetFadeIn", 1.0f);
+        } else {
+            TargetColor = Color.white;
+        }
+
         return model;
     }
 
@@ -210,11 +219,16 @@ public class StationController : MonoBehaviour {
     void Update() {
         if(!isInitialized) { return; }
 
-
+        if(sprite.color != TargetColor) {
+            sprite.color = Color.Lerp(sprite.color, TargetColor, Time.deltaTime * 2.0f);
+        }
     }
 
-    public void UpgradeStation() {
-        int level = model.UpgradeStation();
+    public void SetFadeIn() {
+        TargetColor = Color.white;
+    }
+
+    public void UpgradeStation(int level) {
         // TODO: Animate effects;
         GetComponent<SpriteRenderer>().sprite = GameMaster.Instance.GetLevelController().StationSprites[level];
     }

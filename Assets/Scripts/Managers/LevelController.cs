@@ -7,6 +7,7 @@ public enum OperationMode {
     [Description("Null")] Null = 0,
     [Description("Build Station")] BuildStation = 1,
     [Description("Build Road")] BuildRoad = 2,
+    [Description("Upgrade Station")] UpgradeStation = 3,
 
 }
 
@@ -33,6 +34,10 @@ public class LevelController : MonoBehaviour {
                     InputManager.Instance.OnPointerDown -= FindRoadStartNear;
                     InputManager.Instance.OnPointerUp -= FindRoadEndNear;
                     break;
+
+                case OperationMode.UpgradeStation:
+                    InputManager.Instance.OnClick -= StationUpgrade;
+                    break;
             }
             // Update input binding
             switch(value) {
@@ -48,6 +53,10 @@ public class LevelController : MonoBehaviour {
                 case OperationMode.BuildRoad:
                     InputManager.Instance.OnPointerDown += FindRoadStartNear;
                     InputManager.Instance.OnPointerUp += FindRoadEndNear;
+                    break;
+
+                case OperationMode.UpgradeStation:
+                    InputManager.Instance.OnClick += StationUpgrade;
                     break;
             }
             operationMode = value;
@@ -93,6 +102,16 @@ public class LevelController : MonoBehaviour {
         Station s = FindStationNear(pos);
         if(s != null) {
             s.SendMail();
+        }
+    }
+
+    public void StationUpgrade(Vector2 pos) {
+        Station s = FindStationNear(pos);
+        if(s != null) {
+            ParticleSystem Smoke = Instantiate(SmokePS, pos, Quaternion.identity);
+            Smoke.Play();
+
+            s.UpgradeStation();
         }
     }
 
@@ -142,6 +161,9 @@ public class LevelController : MonoBehaviour {
 
         if(validPos) {
             Debug.Log("Build station on" + pos);
+            ParticleSystem Smoke = Instantiate(SmokePS, pos, Quaternion.identity);
+            Smoke.Play();
+
             GameObject newStation = Instantiate(StationPrefab, pos, Quaternion.identity, StationGroup.transform);
             StationController controller = newStation.GetComponent<StationController>();
             Station station = controller.Initialize(false);
@@ -211,6 +233,10 @@ public class LevelController : MonoBehaviour {
         Instantiate(CloudPrefab);
     }
 
+    public ParticleSystem SmokePS;
+    public ParticleSystem FirePS;
+
+
     // Game Loop
     private void Start() {
         InitializeLevel();
@@ -240,7 +266,7 @@ public class LevelController : MonoBehaviour {
             OperationMode = OperationMode.BuildRoad;
         }
         if(Input.GetKeyDown(KeyCode.R)) {
-            UpdateNavigation();
+            OperationMode = OperationMode.UpgradeStation;
         }
         //DEBUG
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MailArea : MonoBehaviour {
-    public List<GameObject> mailList = new List<GameObject>();
+    public int MailCount = 0;
     public GameObject mail_prefab1;
     public GameObject mail_prefab2;
     public GameObject mail_prefab3;
@@ -84,10 +84,10 @@ public class MailArea : MonoBehaviour {
     public void GenerateOneMail(float time) {
         //Debug.Log("time: " + time + " // hold:" + releaseHold);
         int count = (int)time / (int)releaseHold;
-        if(mailList.Count == count) {
+        if(MailCount == count) {
             StopGenerateMail();
         }
-        else if(mailList.Count < count) {
+        else if(MailCount < count) {
             StartGenerateMail();
         }
 
@@ -107,6 +107,7 @@ public class MailArea : MonoBehaviour {
                 CreateNewMail(new Vector2(mail_x, mail_y), mail_prefab1);
             }
 
+            MailCount++;
             //Debug.Log("mail_x: " + mail_x + " // mail_y:" + mail_y);
         }
 
@@ -125,7 +126,7 @@ public class MailArea : MonoBehaviour {
         
         mail.Initialize(initPos, Random.Range(0, lc.HomeList.Count));
         
-        mailList.Add(newMail);
+        //mailList.Add(newMail);
         GameMaster.Instance.GetLevelController().MailList.Add(mail);
     }
 }
