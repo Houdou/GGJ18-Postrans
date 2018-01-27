@@ -62,9 +62,6 @@ public class LevelController : MonoBehaviour {
     private GameObject RoadGroup;
     private GameObject HomeGroup;
 
-    [SerializeField]
-    private readonly float MinimumHomeDistance = 5.0f;
-
     // Input handling
     [SerializeField]
     private readonly float StationFindingThreshold = 1.0f;
@@ -106,11 +103,14 @@ public class LevelController : MonoBehaviour {
 
         RoadList = new List<Road>();
         StationList = new List<Station>();
+        HomeList = new List<Station>();
     }
 
     // Object management
     public List<Road> RoadList;
     public List<Station> StationList;
+    public List<Station> HomeList;
+
     // Build
     // Station
     public void BuildStationOn(Vector2 pos) {
@@ -184,6 +184,9 @@ public class LevelController : MonoBehaviour {
         if(Input.GetKeyDown(KeyCode.E)) {
             OperationMode = OperationMode.BuildRoad;
         }
+        if(Input.GetKeyDown(KeyCode.R)) {
+            UpdateNavigation();
+        }
         //DEBUG
     }
 
@@ -201,18 +204,48 @@ public class LevelController : MonoBehaviour {
             pos -= ViewRange / 2.0f;
 
             //TODO: Set a minimum distance between different home.
-            foreach(var station in StationList) {
-                while(Vector2.Distance(pos, station.Pos) < MinimumHomeDistance) {
-                    pos = new Vector2(Random.Range(0.2f, 0.8f) * ViewRange.x, Random.Range(0.2f, 0.8f) * ViewRange.y);
-                    pos -= ViewRange / 2.0f;
+            int count = 0;
+            float minDist = 9999.9f;
+            do {
+                foreach(var station in StationList) {
+                    minDist = Mathf.Min(minDist, Vector2.Distance(pos, station.Pos));
                 }
-            }
+                pos = new Vector2(Random.Range(0.2f, 0.8f) * ViewRange.x, Random.Range(0.2f, 0.8f) * ViewRange.y);
+                pos -= ViewRange / 2.0f;
+            } while(minDist < GameMaster.MinimumHomeDistance && count++ < 100);
 
             GameObject newHome = Instantiate(HomePrefab, pos, Quaternion.identity, HomeGroup.transform);
             StationController controller = newHome.GetComponent<StationController>();
             controller.Initialize(true);
 
             StationList.Add(controller.model);
+            HomeList.Add(controller.model);
+        }
+    }
+
+    public void UpdateNavigation() {
+        int HomeCount = HomeList.Count;
+
+        foreach(var station in StationList) {
+            station.ResetNavigationDict(HomeList);
+        }
+
+        foreach(var home in HomeList) {
+            home.UpdateNavigationDict(StationList);
+        }
+        
+        //DEBUG
+        foreach(var station in StationList) {
+            Vector3 startPos = station.Pos;
+            foreach(var s in station.NavigationDict) {
+                Debug.Log("Station " + station.ID + "'s nav to " + s.Key.ID + " is ");
+                Road possibleRoad = station.NavigationDict[s.Key];
+                if(possibleRoad != null) {
+                    Debug.Log(s.Value.ID);
+                    Vector3 endPos = possibleRoad.Next(station).Pos;
+                    Debug.DrawLine(startPos, (endPos - startPos).normalized + startPos, Color.red);
+                }
+            }
         }
     }
 }

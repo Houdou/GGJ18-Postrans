@@ -26,6 +26,11 @@ public class Road {
     public bool Connect(Station a, Station b) {
         bool valid = true;
 
+        // Assuming the road is connected
+        StationList.Add(a);
+        StationList.Add(b);
+        IsConnected = true;
+
         valid &= a.AddRoad(this);
         valid &= b.AddRoad(this);
 
@@ -38,13 +43,18 @@ public class Road {
         if(diffVec.magnitude > 1.0f) { diffVec -= 0.5f * diffVec.normalized; }
         Height = Mathf.Min(2.4f, Mathf.Max(Mathf.CeilToInt(diffVec.magnitude / 2.4f), 1));
         
-
         IsConnected = valid;
+
+        if(!valid) {
+            StationList.Clear();
+        }
 
         return valid;
     }
 
     public bool Disconnect() {
+        IsConnected = false;
+        StationList.Clear();
         return true;
     }
 
@@ -56,6 +66,15 @@ public class Road {
     public Vector3 GetCurvePosByProgress(float progress) {
         return new Vector3(0.0f, 0.0f, -Height * Mathf.Sin(Mathf.Clamp01(progress) * Mathf.PI)) + (Vector3)StationList[0].Pos;
     }
+
+    // Navigation
+    public Station Next(Station from) {
+        if(IsConnected) {
+            if(from == StationList[0]) { return StationList[1]; }
+            if(from == StationList[1]) { return StationList[0]; }
+        }
+        return null;
+    }
 }
 
 public class RoadController : MonoBehaviour {
@@ -63,6 +82,7 @@ public class RoadController : MonoBehaviour {
     public SpriteRenderer sprite;
 
     public bool isInitialized;
+    public int ID;
 
     private void Awake() {
         sprite = GetComponent<SpriteRenderer>();
@@ -71,6 +91,7 @@ public class RoadController : MonoBehaviour {
     public Road Initialize() {
         isInitialized = true;
         model = new Road(gameObject);
+        ID = model.ID;
 
         return model;
     }
