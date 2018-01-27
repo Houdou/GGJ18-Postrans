@@ -38,7 +38,6 @@ GameObject:
   - component: {fileID: 212711515167415892}
   - component: {fileID: 114079405908893496}
   - component: {fileID: 95839831851871014}
-  - component: {fileID: 111489865024278080}
   m_Layer: 0
   m_Name: Mail_2
   m_TagString: Untagged
@@ -90,20 +89,6 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!111 &111489865024278080
-Animation:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1745575451455834}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: e4f27a08534b9e745bb2d967cbe05483, type: 2}
-  m_Animations: []
-  m_WrapMode: 0
-  m_PlayAutomatically: 1
-  m_AnimatePhysics: 0
-  m_CullingType: 0
 --- !u!114 &114079405908893496
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -118,7 +103,8 @@ MonoBehaviour:
   prior: 0
   value: 20
   bonus: 0
-  TargetHome: 0
+  IsAccepted: 0
+  IsTravelling: 0
   moveSpeed: 0.5
   StartTime: 0
 --- !u!212 &212286384644139506
