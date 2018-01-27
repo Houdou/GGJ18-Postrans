@@ -35,6 +35,13 @@ public class Station {
 
     public int level { get; private set; }
 
+    public int UpgradeStation() {
+        if(level < GameMaster.MaxStationLevel) {
+            level += 1;
+        }
+        return level;
+    }
+
     public Station(GameObject obj, bool isHome) {
         station = obj;        
         ID = ++IDCounter;
@@ -162,5 +169,11 @@ public class StationController : MonoBehaviour {
         if(!isInitialized) { return; }
 
 
+    }
+
+    public void UpgradeStation() {
+        int level = model.UpgradeStation();
+        // TODO: Animate effects;
+        GetComponent<SpriteRenderer>().sprite = GameMaster.Instance.GetLevelController().StationSprites[level];
     }
 }

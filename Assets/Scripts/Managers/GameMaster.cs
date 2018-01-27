@@ -50,7 +50,9 @@ public class GameMaster : MonoBehaviour {
         applicationIsQuitting = true;
     }
     #endregion
-    
+
+    public static readonly int MaxStationLevel = 2;
+
     [SerializeField]
     public static readonly float MinimumHomeDistance = 3.0f;
     [SerializeField]

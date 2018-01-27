@@ -58,6 +58,10 @@ public class LevelController : MonoBehaviour {
     public GameObject StationPrefab;
     public GameObject HomePrefab;
 
+    public Sprite[] Markers;
+    public Sprite[] StationSprites;
+
+
     private GameObject StationGroup;
     private GameObject RoadGroup;
     private GameObject HomeGroup;
@@ -157,7 +161,7 @@ public class LevelController : MonoBehaviour {
             if(diffVec.magnitude > 1.0f) {
                 diffVec -= 0.5f * diffVec.normalized;
             }
-            int segments = Mathf.Max(Mathf.CeilToInt(diffVec.magnitude / 0.2f), 12);
+            int segments = Mathf.Max(Mathf.CeilToInt(diffVec.magnitude / 0.15f), 18);
             lr.positionCount = segments + 1;
             for(int i = 0; i <= segments; i++) {
                 Vector3 newPointPos = new Vector3(0.0f, 0.0f, -road.Height * Mathf.Sin(i * Mathf.PI / segments))
@@ -173,6 +177,7 @@ public class LevelController : MonoBehaviour {
 
     }
 
+    // Game Loop
     private void Start() {
         InitializeLevel();
 
@@ -226,6 +231,8 @@ public class LevelController : MonoBehaviour {
             } while(minDist < GameMaster.MinimumHomeDistance && count++ < 100);
 
             GameObject newHome = Instantiate(HomePrefab, pos, Quaternion.identity, HomeGroup.transform);
+            newHome.transform.Find("Marker").GetComponent<SpriteRenderer>().sprite = Markers[i];
+
             StationController controller = newHome.GetComponent<StationController>();
             controller.Initialize(true);
 
