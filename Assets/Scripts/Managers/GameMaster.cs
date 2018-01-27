@@ -2,8 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class GameMaster : MonoBehaviour
-{
+public class GameMaster : MonoBehaviour {
 
     #region Singleton
     private static GameMaster _instance;
@@ -53,14 +52,12 @@ public class GameMaster : MonoBehaviour
     public Text ScreenLogger { get; private set; }
 
     // Use this for initialization
-    void Awake()
-    {
+    void Awake() {
         ScreenLogger = GameObject.Find("ScreenLogger").GetComponent<Text>();
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update() {
 
     }
 
