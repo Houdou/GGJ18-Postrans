@@ -24,18 +24,12 @@ public class Road {
     }
 
     public bool Connect(Station a, Station b) {
-        bool valid = true;
-
-        // Assuming the road is connected
         StationList.Add(a);
         StationList.Add(b);
         IsConnected = true;
 
-        valid &= a.AddRoad(this);
-        valid &= b.AddRoad(this);
-
-        Length = Vector2.Distance(a.Pos, b.Pos);
-        valid &= (Length <= GameMaster.RoadMaxLength);
+        a.AddRoad(this);
+        b.AddRoad(this);
         
         Vector2 diffVec = b.Pos - a.Pos;
         DiffVec = diffVec;
@@ -43,13 +37,8 @@ public class Road {
         if(diffVec.magnitude > 1.0f) { diffVec -= 0.5f * diffVec.normalized; }
         Height = Mathf.Min(2.4f, Mathf.Max(Mathf.CeilToInt(diffVec.magnitude / 2.4f), 1));
         
-        IsConnected = valid;
-
-        if(!valid) {
-            StationList.Clear();
-        }
-
-        return valid;
+        IsConnected = true;
+        return true;
     }
 
     public bool Disconnect() {

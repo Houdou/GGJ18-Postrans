@@ -22,6 +22,7 @@ public class LevelController : MonoBehaviour {
             switch(OperationMode) {
                 default:
                 case OperationMode.Null:
+                    InputManager.Instance.OnClick -= StationSendMail;
                     break;
 
                 case OperationMode.BuildStation:
@@ -37,6 +38,7 @@ public class LevelController : MonoBehaviour {
             switch(value) {
                 default:
                 case OperationMode.Null:
+                    InputManager.Instance.OnClick += StationSendMail;
                     break;
 
                 case OperationMode.BuildStation:
@@ -57,6 +59,7 @@ public class LevelController : MonoBehaviour {
     public GameObject RoadPrefab;
     public GameObject StationPrefab;
     public GameObject HomePrefab;
+    public GameObject CloudPrefab;
 
     public Sprite[] Markers;
     public Sprite[] StationSprites;
@@ -83,6 +86,13 @@ public class LevelController : MonoBehaviour {
         if(endStation != null) {
             // Build road between start and end.
             BuildRoadBetween(startStation, endStation);
+        }
+    }
+
+    public void StationSendMail(Vector2 pos) {
+        Station s = FindStationNear(pos);
+        if(s != null) {
+            s.SendMail();
         }
     }
 
@@ -124,6 +134,12 @@ public class LevelController : MonoBehaviour {
         bool validPos = true; //TODO: Add unbuildable area.
         validPos &= Mathf.Abs(pos.x) <= ViewRange.x / 2.0f;
         validPos &= Mathf.Abs(pos.y) <= ViewRange.y / 2.0f;
+
+        // Check overlap
+        foreach(var station in StationList) {
+            validPos &= Vector2.Distance(pos, station.Pos) > 1.0f;
+        }
+
         if(validPos) {
             Debug.Log("Build station on" + pos);
             GameObject newStation = Instantiate(StationPrefab, pos, Quaternion.identity, StationGroup.transform);
@@ -141,8 +157,19 @@ public class LevelController : MonoBehaviour {
 
     // Road
     public void BuildRoadBetween(Station a, Station b) {
-        float dist = Vector2.Distance(a.Pos, b.Pos);
-        if(dist <= GameMaster.RoadMaxLength) {
+        bool valid =
+            a != b
+            && a.RoadList.Count < a.RoadLimits
+            && b.RoadList.Count < b.RoadLimits
+            && Vector2.Distance(a.Pos, b.Pos) < GameMaster.RoadMaxLength;
+
+        if(!valid) { return; }
+
+        // Check overlapping
+        foreach(var road in a.RoadList) { valid &= road.Next(a) != b; }
+        foreach(var road in b.RoadList) { valid &= road.Next(b) != a; }
+
+        if(valid) {
             Vector2 pos = (a.Pos + b.Pos) / 2.0f;
             Debug.Log("Build road between " + a.ID + ", " + b.ID);
 
@@ -168,13 +195,20 @@ public class LevelController : MonoBehaviour {
                     + i * (Vector3)diffVec / segments + (Vector3)a.Pos + 0.25f * (Vector3)diffVec.normalized;
                 lr.SetPosition(i, newPointPos);
             }
-            
+
             //TODO: Manage animator
+
+            UpdateNavigation();
         } else {
             //TODO: Build error
-            Debug.LogWarning("Road is too long");
+            Debug.LogWarning("Road is invalid");
         }
 
+    }
+
+    // Cloud
+    private void GenerateCloud() {
+        Instantiate(CloudPrefab);
     }
 
     // Game Loop
@@ -187,7 +221,12 @@ public class LevelController : MonoBehaviour {
         CreateMailArea(new Vector2(1f, 1f), Bound);
         CreateMailArea(new Vector2(-3f, -3f), Bound);
         CreateMailArea(new Vector2(6f, -4f), Bound);
+
+        GenerateCloud();
     }
+
+    private float time = 0.0f;
+    public float CloudGenerateTime;
 
     private void Update() {
         //DEBUG
@@ -204,6 +243,14 @@ public class LevelController : MonoBehaviour {
             UpdateNavigation();
         }
         //DEBUG
+
+        time += Time.deltaTime;
+
+        if (time >= CloudGenerateTime) {
+            time -= CloudGenerateTime;
+            GenerateCloud();
+        }
+
     }
 
     public Vector2 ViewRange;
@@ -253,18 +300,18 @@ public class LevelController : MonoBehaviour {
         }
         
         //DEBUG
-        foreach(var station in StationList) {
-            Vector3 startPos = station.Pos;
-            foreach(var s in station.NavigationDict) {
-                Debug.Log("Station " + station.ID + "'s nav to " + s.Key.ID + " is ");
-                Road possibleRoad = station.NavigationDict[s.Key];
-                if(possibleRoad != null) {
-                    Debug.Log(s.Value.ID);
-                    Vector3 endPos = possibleRoad.Next(station).Pos;
-                    Debug.DrawLine(startPos, (endPos - startPos).normalized + startPos, Color.red);
-                }
-            }
-        }
+        //foreach(var station in StationList) {
+        //    Vector3 startPos = station.Pos;
+        //    foreach(var s in station.NavigationDict) {
+        //        //Debug.Log("Station " + station.ID + "'s nav to " + s.Key.ID + " is ");
+        //        Road possibleRoad = station.NavigationDict[s.Key];
+        //        if(possibleRoad != null) {
+        //            //Debug.Log();
+        //            Vector3 endPos = possibleRoad.Next(station).Pos;
+        //            Debug.DrawLine(startPos, (endPos - startPos).normalized + startPos, Color.red);
+        //        }
+        //    }
+        //}
     }
 
     public GameObject MapObject;
