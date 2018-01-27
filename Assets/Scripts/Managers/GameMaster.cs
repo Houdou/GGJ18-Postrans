@@ -47,6 +47,7 @@ public class GameMaster : MonoBehaviour {
     #endregion
 
     public static readonly float RoadMaxLength = 7.0f;
+    public int[] RoadCapacityPerLevel;
 
     public bool useScreenLogger = true;
 

@@ -16,21 +16,33 @@ public class Station {
     }
 
     public readonly bool IsHome;
-
+    public int RoadLimits {
+        get {
+            int limitedLevel = Mathf.Min(GameMaster.Instance.RoadCapacityPerLevel.Length - 1, level);
+            return GameMaster.Instance.RoadCapacityPerLevel[limitedLevel];
+        }
+    }
     public List<Road> RoadList;
-        
+
+    public int level { get; private set; }
 
     public Station(GameObject obj, bool isHome) {
         station = obj;        
         ID = ++IDCounter;
         IsHome = isHome;
+
+        level = 0;
         
         RoadList = new List<Road>();
     }
 
     public bool AddRoad(Road road) {
-        RoadList.Add(road);
-        return true;
+        if(RoadList.Count < RoadLimits) {
+            RoadList.Add(road);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public bool RemoveRoad(Road road) {

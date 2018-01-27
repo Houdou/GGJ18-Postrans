@@ -154,15 +154,13 @@ public class LevelController : MonoBehaviour {
                 diffVec -= 0.5f * diffVec.normalized;
             }
             int segments = Mathf.Max(Mathf.CeilToInt(diffVec.magnitude / 0.2f), 12);
-            float height = Mathf.Min(2.4f, Mathf.Ceil(segments / 12.0f));
             lr.positionCount = segments + 1;
             for(int i = 0; i <= segments; i++) {
-                Vector3 newPointPos = new Vector3(0.0f, 0.0f, -height * Mathf.Sin(i * Mathf.PI / segments))
+                Vector3 newPointPos = new Vector3(0.0f, 0.0f, -road.Height * Mathf.Sin(i * Mathf.PI / segments))
                     + i * (Vector3)diffVec / segments + (Vector3)a.Pos + 0.25f * (Vector3)diffVec.normalized;
                 lr.SetPosition(i, newPointPos);
             }
-
-
+            
             //TODO: Manage animator
         } else {
             //TODO: Build error
