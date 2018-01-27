@@ -7,20 +7,29 @@ public class Mail : MonoBehaviour {
     public float value; // normal return value
     public float max_value; // max return value
     public float rate; // rate to generate
+    public float move_speed = 1f;
 
     private float pos_x; // x 
     private float pos_y; // y 
     private float time = 0.0f; // time
     private float exsit_time = 30.0f; // exist time
 
+    public MailManager MailManagerObj;
+
     // Use this for initialization
     void Start() {
-        MailManager MailManager = GameObject.Find("GameMaster").GetComponent<MailManager>();
+        MailManagerObj = GameObject.Find("GameMaster").GetComponent<MailManager>();
     }
 
     // Update is called once per frame
     void Update() {
         time += Time.deltaTime;
+
+        Vector3 targetStation = FindTargetStation();
+        if(targetStation != new Vector3(0, 0, 0)) {
+            MoveMail(targetStation);
+        }
+
     }
 
     //
@@ -47,9 +56,41 @@ public class Mail : MonoBehaviour {
     //
     //  Move mail to the closest postrans
     //
-    void MoveMail(Vector2 moveDir) {
-
+    void MoveMail(Vector3 targetPosition) {
+        this.transform.position = Vector3.Lerp(this.transform.localPosition, targetPosition, Time.deltaTime * move_speed);
     }
 
+    Vector3 FindTargetStation() {
+        bool findTarget = false;
+        float shortest_distance = 0;
+        Vector3 targetStation = new Vector3(0, 0, 0);
 
+        foreach (GameObject station in MailManagerObj.MailStation) {
+            Vector3 position = station.transform.position;
+            float distance = CalculateDistance(position, this.transform.position);
+
+            if(distance < 5f) { // 3 should be the station range
+                if (!findTarget) {
+                    shortest_distance = distance;
+                    targetStation = station.transform.position;
+                    findTarget = true;
+                }
+                else {
+                    if(distance < shortest_distance) {
+                        shortest_distance = distance;
+                        targetStation = station.transform.position;
+                    }
+                }
+            }
+        }
+
+        return targetStation;
+    }
+
+    float CalculateDistance(Vector3 pos1, Vector3 pos2) {
+        float a = pos1.x - pos2.x;
+        float b = pos1.y - pos2.y;
+
+        return Mathf.Sqrt(a*a + b*b);
+    }
 }

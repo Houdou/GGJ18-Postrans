@@ -56,6 +56,8 @@ MonoBehaviour:
   value: 20
   max_value: 40
   rate: 0
+  move_speed: 5
+  MailManagerObj: {fileID: 0}
 --- !u!212 &212711515167415892
 SpriteRenderer:
   m_ObjectHideFlags: 1
