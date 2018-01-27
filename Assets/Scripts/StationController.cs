@@ -28,13 +28,14 @@ public class Station {
             return GameMaster.Instance.MailRangePerLevel[limitedLevel];
         }
     }
-
-
-    public List<Road> RoadList;
-    public Dictionary<Station, Road> NeighbourStationList;
+    public int MailStorageLimit {
+        get {
+            return 20;
+        }
+    }
 
     public int level { get; private set; }
-
+    
     public int UpgradeStation() {
         if(level < GameMaster.MaxStationLevel) {
             level += 1;
@@ -54,6 +55,9 @@ public class Station {
         NavigationDict = new Dictionary<Station, Road>();
         DistanceDict = new Dictionary<Station, float>();
         PrevStationDict = new Dictionary<Station, Station>();
+
+        MailStorage = new Queue<Mail>();
+        OverflowMailQueue = new Queue<Mail>();
     }
 
     public bool AddRoad(Road road) {
@@ -67,7 +71,7 @@ public class Station {
     }
 
     public bool RemoveRoad(Road road) {
-        return true;
+        return RoadList.Remove(road);
     }
 
     public float DistanceTo(Station station) {
@@ -79,6 +83,8 @@ public class Station {
     }
 
     // Navigation
+    public List<Road> RoadList;
+    public Dictionary<Station, Road> NeighbourStationList;
     public Dictionary<Station, Road> NavigationDict;
     public Dictionary<Station, float> DistanceDict;
     public Dictionary<Station, Station> PrevStationDict;
@@ -137,6 +143,42 @@ public class Station {
             return NavigationDict[station];
         } else {
             return null;
+        }
+    }
+
+    // Mail Storage
+    public Queue<Mail> MailStorage;
+    public Queue<Mail> OverflowMailQueue;
+
+    public bool AddMail(Mail mail) {
+        if(MailStorage.Count < MailStorageLimit) {
+            MailStorage.Enqueue(mail);
+
+            // TODO: Mail animation
+            return true;
+        } else {
+            OverflowMailQueue.Enqueue(mail);
+            return false;
+            // TODO: Mail queueing;
+        }
+    }
+
+    public void SendMail() {
+        // Send all mail
+        while(MailStorage.Count > 0) {
+            Mail mail = MailStorage.Dequeue();
+
+            if(NavigationDict[mail.TargetHome] == null) {
+                // Target not accessible
+                MailStorage.Enqueue(mail);
+            } else {
+                mail.MoveTowards(this, NavigationDict[mail.TargetHome]);
+            }
+        }
+
+        // Collect outsider
+        while(OverflowMailQueue.Count > 0 && MailStorage.Count < MailStorageLimit) {
+            MailStorage.Enqueue(OverflowMailQueue.Dequeue());
         }
     }
 }

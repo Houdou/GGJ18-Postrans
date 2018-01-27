@@ -208,7 +208,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fb626c384789bc47ada77ecb6318412, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RoadCapacityPerLevel: 030000000400000005000000
+  RoadCapacityPerLevel: 040000000500000006000000
   MailRangePerLevel:
   - 1.5
   - 2
