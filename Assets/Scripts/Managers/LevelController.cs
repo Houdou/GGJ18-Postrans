@@ -61,23 +61,13 @@ public class LevelController : MonoBehaviour {
     private GameObject StationGroup;
     private GameObject RoadGroup;
     private GameObject HomeGroup;
-    
-    private void Awake() {
-        StationGroup = new GameObject("StationGroup");
-        RoadGroup = new GameObject("RoadGroup");
-        HomeGroup = new GameObject("HomeGroup");
 
-        RoadList = new List<Road>();
-        StationList = new List<Station>();
-    }
+    [SerializeField]
+    private readonly float MinimumHomeDistance = 5.0f;
 
     // Input handling
-    public void BuildStationOn(Vector2 pos) {
-        Debug.Log("Build station on" + pos);
-        Instantiate(StationPrefab, pos, Quaternion.identity, StationGroup.transform);
-    }
-
-    public readonly float StationFindingThreshold = 1.0f;
+    [SerializeField]
+    private readonly float StationFindingThreshold = 1.0f;
     private Station startStation = null;
 
     public void FindRoadStartNear(Vector2 pos) {
@@ -95,11 +85,7 @@ public class LevelController : MonoBehaviour {
         }
     }
 
-    public void BuildRoadBetween(Station a, Station b) {
-        Vector2 pos = (a.Pos + b.Pos) / 2.0f;
-        Debug.Log("Build road between " + a.ID + ", " + b.ID);
-    }
-
+    // Helper function
     public Station FindStationNear(Vector2 pos) {
         float dist = 99999.9f;
         Station s = null;
@@ -113,10 +99,78 @@ public class LevelController : MonoBehaviour {
         return s;
     }
 
+    private void Awake() {
+        StationGroup = new GameObject("StationGroup");
+        RoadGroup = new GameObject("RoadGroup");
+        HomeGroup = new GameObject("HomeGroup");
+
+        RoadList = new List<Road>();
+        StationList = new List<Station>();
+    }
+
     // Object management
     public List<Road> RoadList;
     public List<Station> StationList;
-    
+    // Build
+    // Station
+    public void BuildStationOn(Vector2 pos) {
+        bool validPos = true; //TODO: Add unbuildable area.
+        validPos &= Mathf.Abs(pos.x) <= ViewRange.x / 2.0f;
+        validPos &= Mathf.Abs(pos.y) <= ViewRange.y / 2.0f;
+        if(validPos) {
+            Debug.Log("Build station on" + pos);
+            GameObject newStation = Instantiate(StationPrefab, pos, Quaternion.identity, StationGroup.transform);
+            StationController controller = newStation.GetComponent<StationController>();
+            Station station = controller.Initialize(false);
+
+            StationList.Add(station);
+
+            //TODO: Manage animator
+        } else {
+            //TODO: Build error
+        }
+    }
+
+    // Road
+    public void BuildRoadBetween(Station a, Station b) {
+        float dist = Vector2.Distance(a.Pos, b.Pos);
+        if(dist <= GameMaster.RoadMaxLength) {
+            Vector2 pos = (a.Pos + b.Pos) / 2.0f;
+            Debug.Log("Build road between " + a.ID + ", " + b.ID);
+
+            GameObject newRoad = Instantiate(RoadPrefab, pos, Quaternion.identity, RoadGroup.transform);
+            RoadController controller = newRoad.GetComponent<RoadController>();
+            Road road = controller.Initialize();
+            road.Connect(a, b);
+
+            RoadList.Add(road);
+
+            // Build road line renderer
+            LineRenderer lr = newRoad.GetComponent<LineRenderer>();
+            lr.useWorldSpace = true;
+
+            Vector2 diffVec = b.Pos - a.Pos;
+            if(diffVec.magnitude > 1.0f) {
+                diffVec -= 0.5f * diffVec.normalized;
+            }
+            int segments = Mathf.Max(Mathf.CeilToInt(diffVec.magnitude / 0.2f), 12);
+            float height = Mathf.Min(2.4f, Mathf.Ceil(segments / 12.0f));
+            lr.positionCount = segments + 1;
+            for(int i = 0; i <= segments; i++) {
+                Vector3 newPointPos = new Vector3(0.0f, 0.0f, -height * Mathf.Sin(i * Mathf.PI / segments))
+                    + i * (Vector3)diffVec / segments + (Vector3)a.Pos + 0.25f * (Vector3)diffVec.normalized;
+                lr.SetPosition(i, newPointPos);
+            }
+
+
+            //TODO: Manage animator
+        } else {
+            //TODO: Build error
+            Debug.LogWarning("Road is too long");
+        }
+
+    }
+
     private void Start() {
         InitializeLevel();
     }
@@ -147,6 +201,14 @@ public class LevelController : MonoBehaviour {
         for(int i = 0; i < InitHomeCount; i++) {
             Vector2 pos = new Vector2(Random.Range(0.2f, 0.8f) * ViewRange.x, Random.Range(0.2f, 0.8f) * ViewRange.y);
             pos -= ViewRange / 2.0f;
+
+            //TODO: Set a minimum distance between different home.
+            foreach(var station in StationList) {
+                while(Vector2.Distance(pos, station.Pos) < MinimumHomeDistance) {
+                    pos = new Vector2(Random.Range(0.2f, 0.8f) * ViewRange.x, Random.Range(0.2f, 0.8f) * ViewRange.y);
+                    pos -= ViewRange / 2.0f;
+                }
+            }
 
             GameObject newHome = Instantiate(HomePrefab, pos, Quaternion.identity, HomeGroup.transform);
             StationController controller = newHome.GetComponent<StationController>();

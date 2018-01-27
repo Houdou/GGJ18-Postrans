@@ -9,20 +9,33 @@ public class Road {
     private GameObject road;
     public readonly int ID;
 
-    public List<Station> stations;
+    public List<Station> StationList;
+
+    public float Length = -1.0f;
+    public bool IsConnected = false;
 
     public Road(GameObject obj) {
         road = obj;
         ID = ++IDCounter;
 
-        stations = new List<Station>();
+        StationList = new List<Station>();
     }
 
-    public bool AddStation(Station station) {
-        return true;
+    public bool Connect(Station a, Station b) {
+        bool valid = true;
+
+        valid &= a.AddRoad(this);
+        valid &= b.AddRoad(this);
+
+        Length = Vector2.Distance(a.Pos, b.Pos);
+        valid &= (Length <= GameMaster.RoadMaxLength);
+
+        IsConnected = valid;
+
+        return valid;
     }
 
-    public bool RemoveStation(Station station) {
+    public bool Disconnect() {
         return true;
     }
 
@@ -39,9 +52,11 @@ public class RoadController : MonoBehaviour {
         sprite = GetComponent<SpriteRenderer>();
     }
 
-    public void Initialize() {
+    public Road Initialize() {
         isInitialized = true;
         model = new Road(gameObject);
+
+        return model;
     }
 
     void Start() {

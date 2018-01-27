@@ -17,7 +17,7 @@ public class Station {
 
     public readonly bool IsHome;
 
-    public List<Road> roads;
+    public List<Road> RoadList;
         
 
     public Station(GameObject obj, bool isHome) {
@@ -25,10 +25,11 @@ public class Station {
         ID = ++IDCounter;
         IsHome = isHome;
         
-        roads = new List<Road>();
+        RoadList = new List<Road>();
     }
 
     public bool AddRoad(Road road) {
+        RoadList.Add(road);
         return true;
     }
 
@@ -49,9 +50,10 @@ public class StationController : MonoBehaviour {
         sprite = GetComponent<SpriteRenderer>();
     }
 
-    public void Initialize(bool isHome) {
+    public Station Initialize(bool isHome) {
         isInitialized = true;
         model = new Station(gameObject, isHome);
+        return model;
     }
 
     void Start() {

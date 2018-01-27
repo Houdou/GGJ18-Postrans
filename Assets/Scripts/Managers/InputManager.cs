@@ -88,7 +88,13 @@ public class InputManager : MonoBehaviour {
 
     public Vector2 MousePos {
         get {
-            return Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 mousePos = Vector2.zero;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if(Physics.Raycast(ray, out hit, 1000.0f)) {
+                mousePos = hit.point;
+            }
+            return mousePos;
         }
     }
 }
