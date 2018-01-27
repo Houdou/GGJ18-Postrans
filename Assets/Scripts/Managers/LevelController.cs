@@ -58,6 +58,10 @@ public class LevelController : MonoBehaviour {
     public GameObject StationPrefab;
     public GameObject HomePrefab;
 
+    public Sprite[] Markers;
+    public Sprite[] StationSprites;
+
+
     private GameObject StationGroup;
     private GameObject RoadGroup;
     private GameObject HomeGroup;
@@ -104,12 +108,15 @@ public class LevelController : MonoBehaviour {
         RoadList = new List<Road>();
         StationList = new List<Station>();
         HomeList = new List<Station>();
+        MailList = new List<Mail>();
     }
 
     // Object management
     public List<Road> RoadList;
     public List<Station> StationList;
     public List<Station> HomeList;
+
+    public List<Mail> MailList;
 
     // Build
     // Station
@@ -126,6 +133,7 @@ public class LevelController : MonoBehaviour {
             StationList.Add(station);
 
             //TODO: Manage animator
+            UpdateIdleMailTargetStation();
         } else {
             //TODO: Build error
         }
@@ -153,7 +161,7 @@ public class LevelController : MonoBehaviour {
             if(diffVec.magnitude > 1.0f) {
                 diffVec -= 0.5f * diffVec.normalized;
             }
-            int segments = Mathf.Max(Mathf.CeilToInt(diffVec.magnitude / 0.2f), 12);
+            int segments = Mathf.Max(Mathf.CeilToInt(diffVec.magnitude / 0.15f), 18);
             lr.positionCount = segments + 1;
             for(int i = 0; i <= segments; i++) {
                 Vector3 newPointPos = new Vector3(0.0f, 0.0f, -road.Height * Mathf.Sin(i * Mathf.PI / segments))
@@ -169,8 +177,16 @@ public class LevelController : MonoBehaviour {
 
     }
 
+    // Game Loop
     private void Start() {
         InitializeLevel();
+
+        Bound = new Vector2(MapObject.GetComponent<Renderer>().bounds.size.x / 2, MapObject.GetComponent<Renderer>().bounds.size.y / 2);
+
+        //DEBUG
+        CreateMailArea(new Vector2(1f, 1f), Bound);
+        CreateMailArea(new Vector2(-3f, -3f), Bound);
+        CreateMailArea(new Vector2(6f, -4f), Bound);
     }
 
     private void Update() {
@@ -215,6 +231,8 @@ public class LevelController : MonoBehaviour {
             } while(minDist < GameMaster.MinimumHomeDistance && count++ < 100);
 
             GameObject newHome = Instantiate(HomePrefab, pos, Quaternion.identity, HomeGroup.transform);
+            newHome.transform.Find("Marker").GetComponent<SpriteRenderer>().sprite = Markers[i];
+
             StationController controller = newHome.GetComponent<StationController>();
             controller.Initialize(true);
 
@@ -246,6 +264,25 @@ public class LevelController : MonoBehaviour {
                     Debug.DrawLine(startPos, (endPos - startPos).normalized + startPos, Color.red);
                 }
             }
+        }
+    }
+
+    public GameObject MapObject;
+    public GameObject MailArea;
+    public List<GameObject> MailAreas = new List<GameObject>();
+
+    public Vector2 Bound;
+
+    public void CreateMailArea(Vector2 initPos, Vector2 bound) {
+        GameObject area = Instantiate(MailArea);
+        area.GetComponent<MailArea>().AreaInit(initPos, bound);
+
+        MailAreas.Add(area);
+    }
+
+    public void UpdateIdleMailTargetStation() {
+        foreach(var mail in MailList) {
+            mail.UpdateTargetStation();
         }
     }
 }

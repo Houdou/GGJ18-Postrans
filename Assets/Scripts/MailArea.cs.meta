@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: fb22e852aeadb3247ac1368ab61d1719
+timeCreated: 1517048866
+licenseType: Free
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - mail_prefab1: {fileID: 1731991315462260, guid: 5168ea1c2d9a7ce49b2f50f6cf4efd3f,
+      type: 2}
+  - mail_prefab2: {fileID: 1745575451455834, guid: f03144b089279d14eaab0ca31a9ca3aa,
+      type: 2}
+  - mail_prefab3: {fileID: 1333238087624746, guid: 158e0515440c44d47bf726b1b66369a1,
+      type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

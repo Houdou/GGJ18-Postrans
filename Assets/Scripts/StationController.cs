@@ -22,10 +22,25 @@ public class Station {
             return GameMaster.Instance.RoadCapacityPerLevel[limitedLevel];
         }
     }
+    public float MailRange {
+        get {
+            int limitedLevel = Mathf.Min(GameMaster.Instance.MailRangePerLevel.Length - 1, level);
+            return GameMaster.Instance.MailRangePerLevel[limitedLevel];
+        }
+    }
+
+
     public List<Road> RoadList;
     public Dictionary<Station, Road> NeighbourStationList;
 
     public int level { get; private set; }
+
+    public int UpgradeStation() {
+        if(level < GameMaster.MaxStationLevel) {
+            level += 1;
+        }
+        return level;
+    }
 
     public Station(GameObject obj, bool isHome) {
         station = obj;        
@@ -154,5 +169,11 @@ public class StationController : MonoBehaviour {
         if(!isInitialized) { return; }
 
 
+    }
+
+    public void UpgradeStation() {
+        int level = model.UpgradeStation();
+        // TODO: Animate effects;
+        GetComponent<SpriteRenderer>().sprite = GameMaster.Instance.GetLevelController().StationSprites[level];
     }
 }
