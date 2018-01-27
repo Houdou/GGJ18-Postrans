@@ -3,23 +3,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[Serializable]
 public class Road {
-    private GameObject road;
+    public static int IDCounter = -1;
 
-    public List<Road> stations;
+    private GameObject road;
+    public readonly int ID;
+
+    public List<Station> stations;
 
     public Road(GameObject obj) {
         road = obj;
+        ID = ++IDCounter;
 
-        stations = new List<Road>();
+        stations = new List<Station>();
     }
 
-    public bool AddStation(Road road) {
+    public bool AddStation(Station station) {
         return true;
     }
 
-    public bool RemoveStation(Road road) {
+    public bool RemoveStation(Station station) {
         return true;
     }
 
@@ -27,7 +30,7 @@ public class Road {
 }
 
 public class RoadController : MonoBehaviour {
-
+    public Road model;
     public SpriteRenderer sprite;
 
     public bool isInitialized;
@@ -38,6 +41,7 @@ public class RoadController : MonoBehaviour {
 
     public void Initialize() {
         isInitialized = true;
+        model = new Road(gameObject);
     }
 
     void Start() {

@@ -3,17 +3,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[Serializable]
 public class Station {
+    public static int IDCounter = -1;
+    
     private GameObject station;
+    public readonly int ID;
+
+    public Vector2 Pos {
+        get {
+            return station.transform.position;
+        }
+    }
 
     public readonly bool IsHome;
 
     public List<Road> roads;
+        
 
-    public Station(GameObject obj) {
-        station = obj;
-
+    public Station(GameObject obj, bool isHome) {
+        station = obj;        
+        ID = ++IDCounter;
+        IsHome = isHome;
+        
         roads = new List<Road>();
     }
 
@@ -29,7 +40,7 @@ public class Station {
 }
 
 public class StationController : MonoBehaviour {
-
+    public Station model;
     public SpriteRenderer sprite;
 
     public bool isInitialized;
@@ -38,8 +49,9 @@ public class StationController : MonoBehaviour {
         sprite = GetComponent<SpriteRenderer>();
     }
 
-    public void Initialize() {
+    public void Initialize(bool isHome) {
         isInitialized = true;
+        model = new Station(gameObject, isHome);
     }
 
     void Start() {

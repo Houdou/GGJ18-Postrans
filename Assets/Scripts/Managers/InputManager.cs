@@ -88,7 +88,7 @@ public class InputManager : MonoBehaviour {
 
     public Vector2 MousePos {
         get {
-            return Camera.main.ScreenToViewportPoint(Input.mousePosition);
+            return Camera.main.ScreenToWorldPoint(Input.mousePosition);
         }
     }
 }
