@@ -157,12 +157,13 @@ public class LevelController : MonoBehaviour {
 
     // Road
     public void BuildRoadBetween(Station a, Station b) {
-        bool valid = true;
-        // Check capacity
-        valid &= a.RoadList.Count < a.RoadLimits;
-        valid &= b.RoadList.Count < b.RoadLimits;
+        bool valid =
+            a != b
+            && a.RoadList.Count < a.RoadLimits
+            && b.RoadList.Count < b.RoadLimits
+            && Vector2.Distance(a.Pos, b.Pos) < GameMaster.RoadMaxLength;
 
-        valid &= Vector2.Distance(a.Pos, b.Pos) < GameMaster.RoadMaxLength;
+        if(!valid) { return; }
 
         // Check overlapping
         foreach(var road in a.RoadList) { valid &= road.Next(a) != b; }
@@ -246,7 +247,7 @@ public class LevelController : MonoBehaviour {
         time += Time.deltaTime;
 
         if (time >= CloudGenerateTime) {
-            time = 0.0f;
+            time -= CloudGenerateTime;
             GenerateCloud();
         }
 
