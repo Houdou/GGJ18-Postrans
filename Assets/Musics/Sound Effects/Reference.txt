@@ -3,7 +3,7 @@ Countdown:  http://www.wavlist.com/soundfx/020/clock-tick2.wav
 Click: http://www.muppetlabs.com/~breadbox/software/tworld/wav/click.wav
 Earning: http://www.pacdv.com/sounds/mechanical_sound_effects/coin_5.wav
 Upgrade Station http://www.daverudolf.com/audio/building.wav
-fire: http://www.hazmatt.net/gaming/starcraft/terran/units/firebat/tfbfir00.wav
+fire: http://cstrike.csmegagaming.com/sound/misc/molotov_fire.wav
 Mail sent: http://osabisi.sakura.ne.jp/m2/
 mail received: http://osabisi.sakura.ne.jp/m2/
 Build Station: http://www.pacdv.com/sounds/mechanical_sound_effects/hammer-1.mp3
