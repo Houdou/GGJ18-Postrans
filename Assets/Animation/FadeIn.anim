@@ -5,7 +5,7 @@ AnimationClip:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: FadeOut
+  m_Name: FadeIn
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
@@ -21,19 +21,19 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 2
         time: 0
-        value: 1
+        value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 136
       - serializedVersion: 2
         time: 0.25
-        value: 0.79113925
-        inSlope: -1.670886
-        outSlope: -1.670886
+        value: 0.75751513
+        inSlope: 1.939879
+        outSlope: 1.939879
         tangentMode: 136
       - serializedVersion: 2
         time: 0.5
-        value: 0
+        value: 1
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -86,19 +86,19 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 2
         time: 0
-        value: 1
+        value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 136
       - serializedVersion: 2
         time: 0.25
-        value: 0.79113925
-        inSlope: -1.670886
-        outSlope: -1.670886
+        value: 0.75751513
+        inSlope: 1.939879
+        outSlope: 1.939879
         tangentMode: 136
       - serializedVersion: 2
         time: 0.5
-        value: 0
+        value: 1
         inSlope: 0
         outSlope: 0
         tangentMode: 136

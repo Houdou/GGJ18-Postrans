@@ -213,6 +213,11 @@ MonoBehaviour:
   - 1.5
   - 2
   - 2.5
+  MailStoragePerLevel: 03000000050000000a000000
+  MailSpeedPerLevel:
+  - 0.5
+  - 1
+  - 2
   useScreenLogger: 1
   GameScene: 0
   ScreenLoggerHeader: 'DEBUG:

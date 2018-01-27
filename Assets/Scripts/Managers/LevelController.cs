@@ -101,17 +101,19 @@ public class LevelController : MonoBehaviour {
     public void StationSendMail(Vector2 pos) {
         Station s = FindStationNear(pos);
         if(s != null) {
-            s.SendMail();
+            s.ProcessMails();
         }
     }
 
     public void StationUpgrade(Vector2 pos) {
         Station s = FindStationNear(pos);
-        if(s != null) {
-            ParticleSystem Smoke = Instantiate(SmokePS, pos, Quaternion.identity);
-            Smoke.Play();
+        if(s != null && !s.IsHome) {
+            if(s.UpgradeStation()) {
+                ParticleSystem Smoke = Instantiate(SmokePS, pos, Quaternion.identity);
+                Smoke.Play();
+            }
 
-            s.UpgradeStation();
+            UpdateIdleMailTargetStation();
         }
     }
 
@@ -312,6 +314,8 @@ public class LevelController : MonoBehaviour {
             StationList.Add(controller.model);
             HomeList.Add(controller.model);
         }
+
+
     }
 
     public void UpdateNavigation() {

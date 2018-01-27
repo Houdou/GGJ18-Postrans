@@ -15,6 +15,7 @@ public class Station {
         }
     }
 
+    public bool IsAvailable;
     public readonly bool IsHome;
     public int RoadLimits {
         get {
@@ -30,23 +31,37 @@ public class Station {
     }
     public int MailStorageLimit {
         get {
-            return 20;
+            int limitedLevel = Mathf.Min(GameMaster.Instance.MailStoragePerLevel.Length - 1, level);
+            return GameMaster.Instance.MailStoragePerLevel[limitedLevel];
+        }
+    }
+    public float MailSpeed {
+        get {
+            int limitedLevel = Mathf.Min(GameMaster.Instance.MailSpeedPerLevel.Length - 1, level);
+            return GameMaster.Instance.MailSpeedPerLevel[limitedLevel];
         }
     }
 
     public int level { get; private set; }
     
-    public void UpgradeStation() {
+    public bool UpgradeStation() {
         if(level < GameMaster.MaxStationLevel) {
             level += 1;
+            station.GetComponent<StationController>().UpgradeStation(level);
+            return true;
+        } else {
+            return false;
         }
-        station.GetComponent<StationController>().UpgradeStation(level);
     }
 
     public Station(GameObject obj, bool isHome) {
         station = obj;        
         ID = ++IDCounter;
         IsHome = isHome;
+
+        if(IsHome) {
+            IsAvailable = true;
+        }
 
         level = 0;
         
@@ -56,6 +71,7 @@ public class Station {
         DistanceDict = new Dictionary<Station, float>();
         PrevStationDict = new Dictionary<Station, Station>();
 
+        SendingQueue = new Queue<Mail>();
         MailStorage = new Queue<Mail>();
         OverflowMailQueue = new Queue<Mail>();
     }
@@ -149,10 +165,13 @@ public class Station {
     }
 
     // Mail Storage
+    public Queue<Mail> SendingQueue;
     public Queue<Mail> MailStorage;
     public Queue<Mail> OverflowMailQueue;
 
     public bool AddMail(Mail mail) {
+        if(MailStorage.Contains(mail) || OverflowMailQueue.Contains(mail)) { return false; }
+
         if(MailStorage.Count < MailStorageLimit) {
             MailStorage.Enqueue(mail);
 
@@ -165,7 +184,7 @@ public class Station {
         }
     }
 
-    public void SendMail() {
+    public void ProcessMails() {
         // Send all mail
         while(MailStorage.Count > 0) {
             Mail mail = MailStorage.Dequeue();
@@ -174,13 +193,22 @@ public class Station {
                 // Target not accessible
                 OverflowMailQueue.Enqueue(mail);
             } else {
-                mail.MoveTowards(this, NavigationDict[mail.TargetHome]);
+                SendingQueue.Enqueue(mail);
             }
         }
 
         // Collect outsider
         while(OverflowMailQueue.Count > 0 && MailStorage.Count < MailStorageLimit) {
-            MailStorage.Enqueue(OverflowMailQueue.Dequeue());
+            Mail mail = OverflowMailQueue.Dequeue();
+            mail.FadeOut();
+            MailStorage.Enqueue(mail);
+        }
+    }
+
+    public void SendMail() {
+        if(SendingQueue.Count > 0) {
+            var mail = SendingQueue.Dequeue();
+            mail.MoveTowards(this, NavigationDict[mail.TargetHome], MailSpeed);
         }
     }
 }
@@ -213,6 +241,9 @@ public class StationController : MonoBehaviour {
         return model;
     }
 
+    public float SendingCounter = 0.0f;
+    public float SendingInterval = 0.12f;
+
     void Start() {
 
     }
@@ -224,10 +255,23 @@ public class StationController : MonoBehaviour {
         if(sprite.color != TargetColor) {
             sprite.color = Color.Lerp(sprite.color, TargetColor, Time.deltaTime * 2.0f);
         }
+
+        if(model.SendingQueue.Count > 0) {
+            SendingCounter += Time.deltaTime;
+            if(SendingCounter > SendingInterval) {
+                SendingCounter -= SendingInterval;
+                model.SendMail();
+                if(model.SendingQueue.Count == 0) {
+                    SendingCounter = 0.0f;
+                }
+            }
+        }
     }
 
     public void SetFadeIn() {
         TargetColor = Color.white;
+        model.IsAvailable = true;
+        GameMaster.Instance.GetLevelController().UpdateIdleMailTargetStation();
     }
 
     public void UpgradeStation(int level) {

@@ -24,6 +24,8 @@ public class Road {
     }
 
     public bool Connect(Station a, Station b) {
+        if(IsConnected) { return false; }
+
         StationList.Add(a);
         StationList.Add(b);
         IsConnected = true;
@@ -36,7 +38,8 @@ public class Road {
 
         if(diffVec.magnitude > 1.0f) { diffVec -= 0.5f * diffVec.normalized; }
         Height = Mathf.Min(2.4f, Mathf.Max(Mathf.CeilToInt(diffVec.magnitude / 2.4f), 1));
-        
+        Length = diffVec.magnitude;
+
         IsConnected = true;
         return true;
     }
@@ -47,13 +50,25 @@ public class Road {
         return true;
     }
 
-    public Vector3 GetCurvePos(Vector2 pos, float nextStep = 0.0f) {
-        float progress = Mathf.Clamp01(Vector2.Dot(pos - StationList[0].Pos, DiffVec) / DiffVec.magnitude);
+    public float GetRoadProgress(Vector2 pos) {
+        return Mathf.Clamp01(Vector2.Dot((pos - StationList[0].Pos).normalized, DiffVec.normalized));
+    }
+
+    public Vector3 GetCurvePos(Station to, Vector2 pos, float nextStep = 0.0f) {
+        if(!StationList.Contains(to)) { return (Vector3)pos;  }
+        
+        float progress = Mathf.Clamp01(Vector2.Dot((pos - StationList[0].Pos).normalized, DiffVec.normalized));
+        float targetProgress = Mathf.Clamp01(Vector2.Dot((to.Pos - StationList[0].Pos).normalized, DiffVec.normalized));
+        
+        nextStep *= Mathf.Sign(targetProgress - progress);
+
         return GetCurvePosByProgress(progress + nextStep);
     }
 
     public Vector3 GetCurvePosByProgress(float progress) {
-        return new Vector3(0.0f, 0.0f, -Height * Mathf.Sin(Mathf.Clamp01(progress) * Mathf.PI)) + (Vector3)StationList[0].Pos;
+        return new Vector3(0.0f, 0.0f, -Height * Mathf.Sin(Mathf.Clamp01(progress) * Mathf.PI))
+            + (Vector3)StationList[0].Pos + (Vector3)DiffVec.normalized * 0.25f
+            + Mathf.Clamp01(progress) * (Vector3)DiffVec;
     }
 
     // Navigation

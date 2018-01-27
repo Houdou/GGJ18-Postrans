@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Mail : MonoBehaviour {
 
+    public static int IDCounter = -1;
+    public int ID;
+
     public float prior; // type of the mail
     public float value; // normal return value
     public float bonus; // max return value
@@ -12,8 +15,10 @@ public class Mail : MonoBehaviour {
     public bool IsAccepted;
     public bool IsTravelling;
 
+    public bool IsArrived;
+
     //public float rate; // rate to generate
-    public float moveSpeed = 1f;
+    public float MoveSpeed = 1f;
     
     public float StartTime;
     public float LifeTime {
@@ -26,9 +31,11 @@ public class Mail : MonoBehaviour {
 
     public Station TargetCollectStation;
     public Road TravellingRoad;
+    public float RoadProgress;
 
     private void Awake() {
         lc = GameMaster.Instance.GetLevelController();
+        ID = ++IDCounter;
     }
 
     private void Start() {
@@ -44,7 +51,7 @@ public class Mail : MonoBehaviour {
         if(IsTravelling) { // Collected, on path
             if(TargetCollectStation != null && IsAccepted) { // Not in station
                 // TODO: Move along the road
-                MoveMail(TargetCollectStation.Pos);
+                MoveAloneRoad();
                 CheckAcceptance(TargetCollectStation);
             }
         }
@@ -60,7 +67,6 @@ public class Mail : MonoBehaviour {
         transform.position = pos;
 
         TargetHome = lc.HomeList[targetHome];
-
         transform.Find("Marker").GetComponent<SpriteRenderer>().sprite = lc.Markers[targetHome];
 
     }
@@ -75,19 +81,35 @@ public class Mail : MonoBehaviour {
     //
     //  Move mail to the closest postrans
     //
-    void MoveMail(Vector3 targetPosition) {
-        transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * moveSpeed);
+    public void MoveMail(Vector3 targetPosition) {
+        transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime);
     }
 
-    public void MoveTowards(Station from, Road road) {
-        Popup();
+    public void MoveAloneRoad() {
+        if(TravellingRoad != null) {
+            RoadProgress += MoveSpeed * Time.deltaTime / TravellingRoad.Length;
+            transform.position = TravellingRoad.GetCurvePosByProgress(RoadProgress);
+        }
+    }
 
-        // TODO: Show up
-        IsTravelling = true;
+    public void MoveAroundStation() {
+        if(TargetCollectStation != null) {
+            MoveMail(TargetCollectStation.Pos + new Vector2(Mathf.Cos(Time.time + ID * 0.1f), -Mathf.Sin(Time.time + ID * 0.1f)) * 0.25f);
+        }
+    }
+
+    public void MoveTowards(Station from, Road road, float speed) {
+        transform.position = from.Pos;
+
+        FadeIn();
+
         TravellingRoad = road;
         TargetCollectStation = road.Next(from);
 
-        Debug.Log("Mail move towards " + TargetCollectStation.ID);
+        RoadProgress = road.StationList[0] == from ? 0.0f : 1.0f;
+        MoveSpeed = speed * (road.StationList[0] == from ? 1.0f : -1.0f);
+
+        IsTravelling = true;
     }
 
     public Station UpdateTargetStation() {
@@ -96,6 +118,8 @@ public class Mail : MonoBehaviour {
             Station targetStation = null;
 
             foreach(var station in lc.StationList) {
+                if(!station.IsAvailable) continue;
+
                 float distance = Vector2.Distance(station.Pos, transform.position);
 
                 if(distance < station.MailRange && distance < shortestDistance) {
@@ -113,39 +137,42 @@ public class Mail : MonoBehaviour {
 
     public void CheckAcceptance(Station station) {
         if(Vector2.Distance(transform.position, station.Pos) < 0.3f) {
-            FadeOut();
-
             if(station.ID == TargetHome.ID) {
-                // Arrival
+                FadeOut();
+                IsAccepted = true;
+                IsArrived = true;
+                IsTravelling = false;
             } else {
                 bool arriveStation = station.AddMail(this);
 
                 if(arriveStation) {
-                    // TODO: Fade out
-
-
+                    FadeOut();
                     IsTravelling = false;
 
                     if(!IsAccepted) {
                         IsAccepted = true;
                     }
-
-
                 } else {
+                    MoveAroundStation();
                     // Waiting outside
                 }
             }
         }
     }
 
-    public void FadeOut() {
-        GetComponent<Animator>().SetTrigger("Arrive");
-        transform.Find("Marker").GetComponent<Animator>().SetTrigger("Arrive");
+    public void FadeIn() {
+        GetComponent<Animator>().SetTrigger("FadeIn");
+        transform.Find("Marker").GetComponent<Animator>().SetTrigger("FadeIn");
     }
 
-    public void Popup() {
-        GetComponent<Animator>().SetTrigger("Popup");
-        transform.Find("Marker").GetComponent<Animator>().SetTrigger("Popup");
+    public void FadeOut() {
+        GetComponent<Animator>().SetTrigger("FadeOut");
+        transform.Find("Marker").GetComponent<Animator>().SetTrigger("FadeOut");
+    }
+
+    public void PopUp() {
+        GetComponent<Animator>().SetTrigger("PopUp");
+        transform.Find("Marker").GetComponent<Animator>().SetTrigger("PopUp");
     }
 }
 
