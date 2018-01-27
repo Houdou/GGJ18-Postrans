@@ -57,6 +57,7 @@ public class LevelController : MonoBehaviour {
     public GameObject RoadPrefab;
     public GameObject StationPrefab;
     public GameObject HomePrefab;
+    public GameObject CloudPrefab;
 
     public Sprite[] Markers;
     public Sprite[] StationSprites;
@@ -177,6 +178,11 @@ public class LevelController : MonoBehaviour {
 
     }
 
+    // Cloud
+    private void GenerateCloud() {
+        Instantiate(CloudPrefab);
+    }
+
     // Game Loop
     private void Start() {
         InitializeLevel();
@@ -187,7 +193,12 @@ public class LevelController : MonoBehaviour {
         CreateMailArea(new Vector2(1f, 1f), Bound);
         CreateMailArea(new Vector2(-3f, -3f), Bound);
         CreateMailArea(new Vector2(6f, -4f), Bound);
+
+        GenerateCloud();
     }
+
+    private float time = 0.0f;
+    public float CloudGenerateTime;
 
     private void Update() {
         //DEBUG
@@ -204,6 +215,14 @@ public class LevelController : MonoBehaviour {
             UpdateNavigation();
         }
         //DEBUG
+
+        time += Time.deltaTime;
+
+        if (time >= CloudGenerateTime) {
+            time = 0.0f;
+            GenerateCloud();
+        }
+
     }
 
     public Vector2 ViewRange;

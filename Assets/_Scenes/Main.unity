@@ -229,6 +229,7 @@ GameObject:
   - component: {fileID: 772560201}
   - component: {fileID: 772560200}
   - component: {fileID: 772560199}
+  - component: {fileID: 772560203}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -312,6 +313,23 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!95 &772560203
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 772560198}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d5d70d89f725ea842aaefd5f52d00c03, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!1 &1031602463
 GameObject:
   m_ObjectHideFlags: 0
@@ -344,6 +362,8 @@ MonoBehaviour:
   StationPrefab: {fileID: 1993391112142822, guid: 97491229644ae3a47ad29fe2489e2179,
     type: 2}
   HomePrefab: {fileID: 1993391112142822, guid: faeab15c59ab3bf4f9d4efb5fd247f7e, type: 2}
+  CloudPrefab: {fileID: 1247260950469172, guid: 0620f032024da224c8aeeff0391f0608,
+    type: 2}
   Markers:
   - {fileID: 21300000, guid: 86a6b4002fa8b354886269fd40fc8a88, type: 3}
   - {fileID: 21300000, guid: fca4b1368b215554d9b8fd4bfa5f9b54, type: 3}
@@ -353,6 +373,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 2cfa14e30ac687a4ab3da7664b678e8f, type: 3}
   - {fileID: 21300000, guid: 8a5a2a72c1096b94086732fe07c0e05f, type: 3}
   MailList: []
+  CloudGenerateTime: 8
   ViewRange: {x: 0, y: 0}
   MapObject: {fileID: 1344066363}
   MailArea: {fileID: 1808656730641010, guid: f2141539a538fc64ebbae3b7ae43d29a, type: 2}
