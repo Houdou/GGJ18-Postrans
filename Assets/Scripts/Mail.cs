@@ -10,6 +10,8 @@ public class Mail : MonoBehaviour {
     public float prior; // type of the mail
     public float value; // normal return value
     public float bonus; // max return value
+
+    public AudioClip mailReceivedAC;
     
     public Station TargetHome;
     public bool IsAccepted;
@@ -168,6 +170,7 @@ public class Mail : MonoBehaviour {
     public void FadeOut() {
         GetComponent<Animator>().SetTrigger("FadeOut");
         transform.Find("Marker").GetComponent<Animator>().SetTrigger("FadeOut");
+        AudioSource.PlayClipAtPoint(mailReceivedAC, transform.localPosition);
     }
 
     public void PopUp() {

@@ -51,13 +51,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb22e852aeadb3247ac1368ab61d1719, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mails: []
+  MailCount: 0
   mail_prefab1: {fileID: 1731991315462260, guid: 5168ea1c2d9a7ce49b2f50f6cf4efd3f,
     type: 2}
   mail_prefab2: {fileID: 1745575451455834, guid: f03144b089279d14eaab0ca31a9ca3aa,
     type: 2}
   mail_prefab3: {fileID: 1333238087624746, guid: 158e0515440c44d47bf726b1b66369a1,
     type: 2}
-  pos_x: 0
-  pos_y: 0
+  mailGenerateAC: {fileID: 8300000, guid: c7e273dee225e1146a661647408c4091, type: 3}
+  PosX: 0
+  PosY: 0
   radius: 0

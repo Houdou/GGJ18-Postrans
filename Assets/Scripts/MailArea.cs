@@ -7,6 +7,7 @@ public class MailArea : MonoBehaviour {
     public GameObject mail_prefab1;
     public GameObject mail_prefab2;
     public GameObject mail_prefab3;
+    public AudioClip mailGenerateAC;
 
     public float PosX; // x of center
     public float PosY; // y of center
@@ -108,6 +109,7 @@ public class MailArea : MonoBehaviour {
             }
 
             MailCount++;
+            AudioSource.PlayClipAtPoint(mailGenerateAC, new Vector2(mail_x, mail_y));
             //Debug.Log("mail_x: " + mail_x + " // mail_y:" + mail_y);
         }
 

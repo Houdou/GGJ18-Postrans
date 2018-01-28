@@ -73,6 +73,11 @@ public class LevelController : MonoBehaviour {
     public Sprite[] Markers;
     public Sprite[] StationSprites;
 
+    public AudioClip buildRoadAC;
+    public AudioClip buildStationAC;
+    public AudioClip sendMailAC;
+    public AudioClip upgradeAC;
+
 
     private GameObject StationGroup;
     private GameObject RoadGroup;
@@ -95,6 +100,7 @@ public class LevelController : MonoBehaviour {
         if(endStation != null) {
             // Build road between start and end.
             BuildRoadBetween(startStation, endStation);
+            AudioSource.PlayClipAtPoint(buildRoadAC, pos);
         }
     }
 
@@ -102,6 +108,7 @@ public class LevelController : MonoBehaviour {
         Station s = FindStationNear(pos);
         if(s != null) {
             s.ProcessMails();
+            AudioSource.PlayClipAtPoint(sendMailAC, pos);
         }
     }
 
@@ -110,6 +117,7 @@ public class LevelController : MonoBehaviour {
         if(s != null && !s.IsHome) {
             if(s.UpgradeStation()) {
                 ParticleSystem Smoke = Instantiate(SmokePS, pos, Quaternion.identity);
+                AudioSource.PlayClipAtPoint(upgradeAC, pos);
                 Smoke.Play();
             }
 
@@ -171,7 +179,7 @@ public class LevelController : MonoBehaviour {
             Station station = controller.Initialize(false);
 
             StationList.Add(station);
-
+            AudioSource.PlayClipAtPoint(buildStationAC, pos);
             //TODO: Manage animator
             UpdateIdleMailTargetStation();
         } else {
