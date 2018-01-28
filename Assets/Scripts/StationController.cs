@@ -14,6 +14,9 @@ public class Station {
         get {
             return station.transform.position;
         }
+        set {
+            station.transform.position = value;
+        }
     }
 
     public bool IsAvailable;
@@ -190,6 +193,8 @@ public class Station {
     public Queue<Mail> MailStorage;
     public Queue<Mail> OverflowMailQueue;
 
+    public bool AutoSend;
+
     public bool AddMail(Mail mail) {
         if(MailStorage.Contains(mail) || OverflowMailQueue.Contains(mail)) { return false; }
 
@@ -197,6 +202,11 @@ public class Station {
             MailStorage.Enqueue(mail);
             controller.UpdateIndicator(MailStorage);
             // TODO: Mail animation
+
+            if(AutoSend && MailStorage.Count > MailStorageLimit / 2) {
+                ProcessMails();
+                GameMaster.Instance.GetLevelController().MoneyLeft -= GameMaster.Instance.SendCost / 2;
+            }
             return true;
         } else {
             OverflowMailQueue.Enqueue(mail);

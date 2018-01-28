@@ -269,9 +269,9 @@ public class LevelController : MonoBehaviour {
         Bound = new Vector2(MapObject.GetComponent<Renderer>().bounds.size.x / 2, MapObject.GetComponent<Renderer>().bounds.size.y / 2);
 
         //DEBUG
-        CreateMailArea(new Vector2(1f, 1f), Bound);
-        CreateMailArea(new Vector2(-3f, -3f), Bound);
-        CreateMailArea(new Vector2(6f, -4f), Bound);
+        CreateMailArea(new Vector2(-1.07f, 2.02f), Bound);
+        CreateMailArea(new Vector2(-5.5f, -1.28f), Bound);
+        CreateMailArea(new Vector2(5.38f, -2.18f), Bound);
 
         GenerateCloud();
     }
@@ -292,6 +292,9 @@ public class LevelController : MonoBehaviour {
         }
         if(Input.GetKeyDown(KeyCode.R)) {
             OperationMode = OperationMode.UpgradeStation;
+        }
+        if(Input.GetKeyDown(KeyCode.T)) {
+            AutoScript();
         }
         //DEBUG
 
@@ -343,6 +346,8 @@ public class LevelController : MonoBehaviour {
 
             MoneyLeft = 500;
         }
+
+        Debug.Log(StationList.Count);
 
         StartLevelTime = Time.time;
 
@@ -440,5 +445,58 @@ public class LevelController : MonoBehaviour {
         }
     }
     public Text MoneyLeftCounting;
+
+    // DEBUG
+
+    public void AutoScript() {
+        CameraController.DeltaZoom = 1.0f;
+
+        MoneyLeft = 2000;
+
+        HomeList[0].Pos = new Vector2(-2.5f, -1.69f);
+        HomeList[1].Pos = new Vector2(1.08f, 2.44f);
+        HomeList[2].Pos = new Vector2(3.12f, -0.4f);
+
+        BuildStationOn(new Vector2(-0.879f, 0.231f));
+        BuildStationOn(new Vector2(5.04f, -2.74f));
+        BuildStationOn(new Vector2(0.34f, -2.64f));
+        BuildStationOn(new Vector2(-4.09f, -2.78f));
+        BuildStationOn(new Vector2(-3.37f, 1.33f));
+        BuildStationOn(new Vector2(-5.8f, 0.08f));
+        BuildStationOn(new Vector2(-1.24f, 2.6f));
+        BuildStationOn(new Vector2(6.66f, -2.36f));
+        BuildStationOn(new Vector2(-2.37f, -3.17f));
+        BuildStationOn(new Vector2(5.0f, 2.2f));
+        BuildStationOn(new Vector2(6.26f, 0.5f));
+        BuildStationOn(new Vector2(2.58f, -3.43f));
+        
+        StationList[3].UpgradeStation();
+        StationList[3].UpgradeStation();
+        StationList[4].UpgradeStation();
+
+        BuildRoadBetween(StationList[0], StationList[3]);
+        BuildRoadBetween(StationList[0], StationList[5]);
+        BuildRoadBetween(StationList[0], StationList[6]);
+        BuildRoadBetween(StationList[0], StationList[8]);
+        BuildRoadBetween(StationList[1], StationList[3]);
+        BuildRoadBetween(StationList[1], StationList[9]);
+        BuildRoadBetween(StationList[1], StationList[12]);
+        BuildRoadBetween(StationList[2], StationList[3]);
+        BuildRoadBetween(StationList[2], StationList[4]);
+        BuildRoadBetween(StationList[2], StationList[5]);
+        BuildRoadBetween(StationList[2], StationList[12]);
+        BuildRoadBetween(StationList[3], StationList[7]);
+        BuildRoadBetween(StationList[4], StationList[10]);
+        BuildRoadBetween(StationList[4], StationList[14]);
+        BuildRoadBetween(StationList[5], StationList[11]);
+        BuildRoadBetween(StationList[5], StationList[14]);
+        BuildRoadBetween(StationList[7], StationList[8]);
+        BuildRoadBetween(StationList[10], StationList[13]);
+        BuildRoadBetween(StationList[12], StationList[13]);
+        
+        foreach(var station in StationList) {
+            station.AutoSend = true;
+        }
+    }
 
 }
