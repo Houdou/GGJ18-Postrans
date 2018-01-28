@@ -29,6 +29,12 @@ public class Station {
             return GameMaster.Instance.MailRangePerLevel[limitedLevel];
         }
     }
+    public float OrbitRadius {
+        get {
+            int limitedLevel = Mathf.Min(GameMaster.Instance.OrbitRadiusPerLevel.Length - 1, level);
+            return GameMaster.Instance.OrbitRadiusPerLevel[limitedLevel];
+        }
+    }
     public int MailStorageLimit {
         get {
             int limitedLevel = Mathf.Min(GameMaster.Instance.MailStoragePerLevel.Length - 1, level);
@@ -91,6 +97,10 @@ public class Station {
     }
 
     public float DistanceTo(Station station) {
+        if(station == this) {
+            return 0.0f;
+        }
+
         if(NeighbourStationList.ContainsKey(station)) {
             return NeighbourStationList[station].Length;
         } else {
@@ -133,21 +143,24 @@ public class Station {
         foreach(var station in NeighbourStationList.Keys) {
             if(!station.searchMark) {
                 searchList.Enqueue(station);
+                station.searchMark = true;
                 PrevStationDict[station] = this;
             }
         }
 
         while(searchList.Count > 0) {
             var s = searchList.Dequeue();
-            if(PrevStationDict[s].DistanceTo(s) + PrevStationDict[s].DistanceDict[this] < s.DistanceDict[this]) {
+            float newDist = PrevStationDict[s].DistanceTo(s) + PrevStationDict[s].DistanceDict[this];
+            if(newDist < s.DistanceDict[this]) {
+                // Update pointer to this;
                 s.NavigationDict[this] = s.NeighbourStationList[PrevStationDict[s]];
-                s.DistanceDict[this] = PrevStationDict[s].DistanceTo(s) + PrevStationDict[s].DistanceDict[this];
+                s.DistanceDict[this] = newDist;
             }
-            s.searchMark = true;
 
             foreach(var station in s.NeighbourStationList.Keys) {
                 if(!station.searchMark) {
                     searchList.Enqueue(station);
+                    station.searchMark = true;
                     PrevStationDict[station] = s;
                 }
             }
@@ -196,11 +209,14 @@ public class Station {
                 SendingQueue.Enqueue(mail);
             }
         }
+    }
 
+    public void FillingMails() {
         // Collect outsider
-        while(OverflowMailQueue.Count > 0 && MailStorage.Count < MailStorageLimit) {
+        if(OverflowMailQueue.Count > 0 && MailStorage.Count < MailStorageLimit) {
             Mail mail = OverflowMailQueue.Dequeue();
-            mail.FadeOut();
+            if(mail.IsTravelling)
+                mail.FadeOut();
             MailStorage.Enqueue(mail);
         }
     }
@@ -241,6 +257,8 @@ public class StationController : MonoBehaviour {
         return model;
     }
 
+    public float FillingCounter = 0.0f;
+    public float FillingInterval = 0.3f;
     public float SendingCounter = 0.0f;
     public float SendingInterval = 0.12f;
 
@@ -254,6 +272,14 @@ public class StationController : MonoBehaviour {
 
         if(sprite.color != TargetColor) {
             sprite.color = Color.Lerp(sprite.color, TargetColor, Time.deltaTime * 2.0f);
+        }
+
+        if(model.OverflowMailQueue.Count > 0) {
+            FillingCounter += Time.deltaTime;
+            if(FillingCounter > FillingInterval) {
+                FillingCounter -= FillingInterval;
+                model.FillingMails();
+            }
         }
 
         if(model.SendingQueue.Count > 0) {

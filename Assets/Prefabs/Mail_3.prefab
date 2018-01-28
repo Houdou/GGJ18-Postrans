@@ -118,13 +118,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4151f7573335284ba2fb554f708f0b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ID: 0
   prior: 0
   value: 50
   bonus: 0
   IsAccepted: 0
   IsTravelling: 0
-  moveSpeed: 0.5
+  IsArrived: 0
+  MoveSpeed: 1
   StartTime: 0
+  RoadProgress: 0
+  TargetProgress: 0
 --- !u!212 &212082533285289600
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -202,7 +206,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -312779793
   m_SortingLayer: -1
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: c76c05e35cb445546bcb9c73826b29ba, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
