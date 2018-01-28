@@ -63,6 +63,7 @@ public class GameMaster : MonoBehaviour {
     public float[] OrbitRadiusPerLevel;
     public int[] MailStoragePerLevel;
     public float[] MailSpeedPerLevel;
+    public Vector3[] SotrageIndicatorOffsetPerLevel;
 
     public bool useScreenLogger = true;
 
