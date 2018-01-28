@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: cc9c8fe2877f8a249be0f7f5cd46fba1
+timeCreated: 1517075405
+licenseType: Free
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: TWINPINES
+  fontNames:
+  - TWINPINES
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

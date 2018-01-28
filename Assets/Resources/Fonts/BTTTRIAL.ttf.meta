@@ -1,0 +1,24 @@
+fileFormatVersion: 2
+guid: bfbc7079e937d064aa4304b17317c50b
+timeCreated: 1517075405
+licenseType: Free
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: brush-tipTerrence
+  fontNames:
+  - brush-tipTerrence
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: b6f16f8707acd6d46997fca571065bb6, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -362,4 +362,18 @@ public class LevelController : MonoBehaviour {
             mail.UpdateTargetStation();
         }
     }
+
+    // Game Functions
+    public void BuildStationOp() {
+        OperationMode = OperationMode.BuildStation;
+    }
+    public void BuildRoadOp() {
+        OperationMode = OperationMode.BuildRoad;
+    }
+    public void UpgradeStationOp() {
+        OperationMode = OperationMode.UpgradeStation;
+    }
+    public void SendMailOp() {
+        OperationMode = OperationMode.Null;
+    }
 }

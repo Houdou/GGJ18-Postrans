@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: ebf4cb8b8bd39124b812682469f98fbf
+timeCreated: 1517075405
+licenseType: Free
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: brush-tipTexe TRIAL
+  fontNames:
+  - brush-tipTexe TRIAL
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
