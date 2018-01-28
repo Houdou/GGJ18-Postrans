@@ -281,7 +281,7 @@ public class LevelController : MonoBehaviour {
         }
 
         TimeCounting(Time.time);
-        MoneyCounting(0);
+        MoneyCounting(MoneyLeft);
 
     }
 
@@ -407,7 +407,7 @@ public class LevelController : MonoBehaviour {
         return (minute + ":" + second_str);
     }
 
-
+    public int MoneyLeft;
     public Text MoneyLeftCounting;
     // Money Counting
     public void MoneyCounting(int sum) {
