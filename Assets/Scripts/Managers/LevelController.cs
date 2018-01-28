@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum OperationMode {
     [Description("Null")] Null = 0,
@@ -279,9 +280,13 @@ public class LevelController : MonoBehaviour {
             GenerateCloud();
         }
 
+        TimeCounting(Time.time);
+        MoneyCounting(0);
+
     }
 
     public Vector2 ViewRange;
+    private float StartLevelTime;
 
     public void InitializeLevel() {
         // Limit the game view range
@@ -315,6 +320,7 @@ public class LevelController : MonoBehaviour {
             HomeList.Add(controller.model);
         }
 
+        StartLevelTime = Time.time;
 
     }
 
@@ -376,4 +382,36 @@ public class LevelController : MonoBehaviour {
     public void SendMailOp() {
         OperationMode = OperationMode.Null;
     }
+
+    public Text TimeLeftCounting;
+    public float GameTotalTime;
+
+    // Time Counting
+    public void TimeCounting(float curTime) {
+        float timePast = curTime - StartLevelTime;
+        float timeLeft = GameTotalTime - timePast;
+
+        if (timeLeft <= 0) {
+            return;
+        }
+
+        TimeLeftCounting.text = TimeFormating(timeLeft);
+    }
+
+    private string TimeFormating(float time) {
+        int minute = (int)(time / 60);
+        int second = (int)(time % 60);
+
+        string second_str = (second < 10) ? "0" + second : second.ToString();
+
+        return (minute + ":" + second_str);
+    }
+
+
+    public Text MoneyLeftCounting;
+    // Money Counting
+    public void MoneyCounting(int sum) {
+        MoneyLeftCounting.text = sum.ToString();
+    }
+
 }
