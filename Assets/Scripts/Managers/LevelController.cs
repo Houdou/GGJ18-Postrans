@@ -66,6 +66,8 @@ public class LevelController : MonoBehaviour {
         }
     }
 
+    public LevelCameraController CameraController;
+
     public GameObject RoadPrefab;
     public GameObject StationPrefab;
     public GameObject HomePrefab;
@@ -149,6 +151,8 @@ public class LevelController : MonoBehaviour {
         StationList = new List<Station>();
         HomeList = new List<Station>();
         MailList = new List<Mail>();
+
+        CameraController = Camera.main.GetComponent<LevelCameraController>();
     }
 
     // Object management
@@ -162,8 +166,8 @@ public class LevelController : MonoBehaviour {
     // Station
     public void BuildStationOn(Vector2 pos) {
         bool validPos = true; //TODO: Add unbuildable area.
-        validPos &= Mathf.Abs(pos.x) <= ViewRange.x / 2.0f;
-        validPos &= Mathf.Abs(pos.y) <= ViewRange.y / 2.0f;
+        validPos &= Mathf.Abs(pos.x) <= ViewRange.x / 2.0f - 2.0f;
+        validPos &= Mathf.Abs(pos.y) <= ViewRange.y / 2.0f - 1.8f;
 
         // Check overlap
         foreach(var station in StationList) {
@@ -293,13 +297,14 @@ public class LevelController : MonoBehaviour {
 
     }
 
-    public Vector2 ViewRange;
+    public Vector2 ViewRange {
+        get {
+            return new Vector2(16.0f + 3.2f * CameraController.DeltaZoom, 9.0f + 1.8f * CameraController.DeltaZoom);
+        }
+    }
     private float StartLevelTime;
 
     public void InitializeLevel() {
-        // Limit the game view range
-        ViewRange = new Vector2(19.2f, 10.8f);
-
         // Create several initial Home station
         int InitHomeCount = 3;
 
