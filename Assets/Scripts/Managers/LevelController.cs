@@ -473,6 +473,7 @@ public class LevelController : MonoBehaviour {
         StationList[3].UpgradeStation();
         StationList[3].UpgradeStation();
         StationList[4].UpgradeStation();
+        StationList[8].UpgradeStation();
 
         BuildRoadBetween(StationList[0], StationList[3]);
         BuildRoadBetween(StationList[0], StationList[5]);

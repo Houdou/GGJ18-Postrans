@@ -656,6 +656,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fb626c384789bc47ada77ecb6318412, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  StationCost: 200
+  RoadCost: 10
+  UpgradeCost: 200
+  SendCost: 20
   RoadCapacityPerLevel: 040000000500000006000000
   MailRangePerLevel:
   - 1.5
@@ -957,7 +961,6 @@ MonoBehaviour:
   Bound: {x: 0, y: 0}
   TimeLeftCounting: {fileID: 1045212914}
   GameTotalTime: 120
-  MoneyLeft: 0
   MoneyLeftCounting: {fileID: 1239947034}
 --- !u!4 &1031602465
 Transform:
@@ -1418,7 +1421,7 @@ AudioSource:
   m_PlayOnAwake: 1
   m_Volume: 0.1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
