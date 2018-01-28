@@ -37,6 +37,7 @@ GameObject:
   - component: {fileID: 4173124869268548}
   - component: {fileID: 212780179615660820}
   - component: {fileID: 114203852978776998}
+  - component: {fileID: 114399865471599398}
   m_Layer: 0
   m_Name: Home
   m_TagString: Untagged
@@ -83,9 +84,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sprite: {fileID: 0}
+  si: {fileID: 0}
   TargetColor: {r: 0, g: 0, b: 0, a: 0}
   isInitialized: 0
   ID: 0
+  FillingCounter: 0
+  FillingInterval: 0.12
+  SendingCounter: 0
+  SendingInterval: 0.08
+--- !u!114 &114399865471599398
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1993391112142822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 478e20c2442860b4492ab16834fea5e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DotPrefab: {fileID: 1390974133862558, guid: 8c5cee39b78220d41bfb220df926aefe, type: 2}
+  DotGroup: {fileID: 0}
+  Dots: []
 --- !u!212 &212546451747657138
 SpriteRenderer:
   m_ObjectHideFlags: 1
