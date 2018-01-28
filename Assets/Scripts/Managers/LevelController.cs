@@ -341,7 +341,7 @@ public class LevelController : MonoBehaviour {
             StationList.Add(controller.model);
             HomeList.Add(controller.model);
 
-            MoneyLeft = 500;
+            MoneyLeft = 2000;
         }
 
         StartLevelTime = Time.time;
