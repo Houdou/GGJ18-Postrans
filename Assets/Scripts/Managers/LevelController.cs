@@ -110,7 +110,9 @@ public class LevelController : MonoBehaviour {
     public void StationSendMail(Vector2 pos) {
         Station s = FindStationNear(pos);
         if(s != null) {
-            s.ProcessMails();
+            if(s.ProcessMails()) {
+                MoneyLeft -= GameMaster.SendCost;
+            }
             AudioSource.PlayClipAtPoint(sendMailAC, pos);
         }
     }
@@ -124,6 +126,7 @@ public class LevelController : MonoBehaviour {
                 Smoke.Play();
             }
 
+            MoneyLeft -= GameMaster.UpgradeCost;
             UpdateIdleMailTargetStation();
         }
     }
@@ -187,6 +190,8 @@ public class LevelController : MonoBehaviour {
             AudioSource.PlayClipAtPoint(buildStationAC, pos);
             //TODO: Manage animator
             UpdateIdleMailTargetStation();
+
+            MoneyLeft -= GameMaster.StationCost;
         } else {
             //TODO: Build error
         }
@@ -234,7 +239,7 @@ public class LevelController : MonoBehaviour {
             }
 
             //TODO: Manage animator
-
+            MoneyLeft -= GameMaster.RoadCost;
             UpdateNavigation();
         } else {
             //TODO: Build error
@@ -250,7 +255,12 @@ public class LevelController : MonoBehaviour {
 
     public ParticleSystem SmokePS;
     public ParticleSystem FirePS;
-
+    
+    public void BurnMail(Mail mail) {
+        ParticleSystem Fire = Instantiate(FirePS, mail.transform.position + new Vector3(0.0f, -0.2f, 0.0f), Quaternion.identity);
+        FirePS.Play();
+        mail.FadeOut();
+    }
 
     // Game Loop
     private void Start() {
@@ -293,7 +303,6 @@ public class LevelController : MonoBehaviour {
         }
 
         TimeCounting(Time.time);
-        MoneyCounting(MoneyLeft);
 
     }
 
@@ -420,11 +429,14 @@ public class LevelController : MonoBehaviour {
         return (minute + ":" + second_str);
     }
 
-    public int MoneyLeft;
-    public Text MoneyLeftCounting;
-    // Money Counting
-    public void MoneyCounting(int sum) {
-        MoneyLeftCounting.text = sum.ToString();
+    private int moneyLeft = 0;
+    public int MoneyLeft {
+        get { return moneyLeft; }
+        set {
+            moneyLeft = value;
+            MoneyLeftCounting.text = moneyLeft.ToString();
+        }
     }
+    public Text MoneyLeftCounting;
 
 }

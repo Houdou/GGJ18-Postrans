@@ -710,7 +710,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
+  m_BlockingObjects: 3
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -928,6 +928,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   operationMode: 0
+  CameraController: {fileID: 0}
   RoadPrefab: {fileID: 1993391112142822, guid: da11df41a62dd6b40a52ca943c16c161, type: 2}
   StationPrefab: {fileID: 1993391112142822, guid: 97491229644ae3a47ad29fe2489e2179,
     type: 2}
@@ -948,9 +949,8 @@ MonoBehaviour:
   upgradeAC: {fileID: 8300000, guid: 10d3008dd31c27041bbf84a9dfb43281, type: 3}
   MailList: []
   SmokePS: {fileID: 198937376949841626, guid: d328ed44ca0887b40a849a95641b9334, type: 2}
-  FirePS: {fileID: 0}
+  FirePS: {fileID: 198810140485965226, guid: d0178aa11538e9f43bc2876fe81a54de, type: 2}
   CloudGenerateTime: 12
-  ViewRange: {x: 0, y: 0}
   MapObject: {fileID: 1344066363}
   MailArea: {fileID: 1808656730641010, guid: f2141539a538fc64ebbae3b7ae43d29a, type: 2}
   MailAreas: []
@@ -1668,7 +1668,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 9377052fab5b411479ffa4f3912c459b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e353b68b7a2a78a49bd43954819a9009, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

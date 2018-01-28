@@ -8,14 +8,16 @@ public class Mail : MonoBehaviour {
     public int ID;
 
     public float prior; // type of the mail
-    public float value; // normal return value
-    public float bonus; // max return value
+    public int value; // normal return value
+    public int bonus; // max return value
+    public float AvailableTime;
 
     public AudioClip mailReceivedAC;
     
     public Station TargetHome;
     public bool IsAccepted;
     public bool IsTravelling;
+    public bool IsBurned;
 
     public bool IsArrived;
 
@@ -23,7 +25,7 @@ public class Mail : MonoBehaviour {
     public float MoveSpeed = 1f;
     
     public float StartTime;
-    public float LifeTime {
+    public float LivingTime {
         get {
             return Time.time - StartTime;
         }
@@ -43,12 +45,22 @@ public class Mail : MonoBehaviour {
 
     private void Start() {
         UpdateTargetStation();
+        StartTime = Time.time;
     }
 
     private void Update() {
-        if(TargetCollectStation != null && !IsAccepted) {
-            MoveMail(TargetCollectStation.Pos);
-            CheckAcceptance(TargetCollectStation);
+        if(IsBurned) { return; }
+
+        if(!IsAccepted) {
+            if(TargetCollectStation != null) {
+                MoveMail(TargetCollectStation.Pos);
+                CheckAcceptance(TargetCollectStation);
+            }
+
+            if(LivingTime > AvailableTime) {
+                IsBurned = true;
+                GameMaster.Instance.GetLevelController().BurnMail(this);
+            }
         }
 
         if(IsTravelling) { // Collected, on path
@@ -150,6 +162,7 @@ public class Mail : MonoBehaviour {
                 IsTravelling = false;
 
                 // TODO: Add money
+                lc.MoneyLeft += value;
                 // TODO: Play sound
 
             } else {

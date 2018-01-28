@@ -205,8 +205,9 @@ public class Station {
         }
     }
 
-    public void ProcessMails() {
+    public bool ProcessMails() {
         // Send all mail
+        bool isSend = false;
         while(MailStorage.Count > 0) {
             Mail mail = MailStorage.Dequeue();
 
@@ -214,10 +215,12 @@ public class Station {
                 // Target not accessible
                 OverflowMailQueue.Enqueue(mail);
             } else {
+                isSend |= true;
                 SendingQueue.Enqueue(mail);
             }
         }
         controller.UpdateIndicator(MailStorage);
+        return isSend;
     }
 
     public void FillingMails() {
@@ -244,12 +247,15 @@ public class StationController : MonoBehaviour {
     public SpriteRenderer sprite;
     public StorageIndicator si;
 
+    private LevelController lc;
+
     public Color TargetColor;
 
     public bool isInitialized;
     public int ID;
     
     private void Awake() {
+        lc = GameMaster.Instance.GetLevelController();
         sprite = GetComponent<SpriteRenderer>();
         si = GetComponent<StorageIndicator>();
     }
@@ -312,7 +318,7 @@ public class StationController : MonoBehaviour {
     public void SetFadeIn() {
         TargetColor = Color.white;
         model.IsAvailable = true;
-        GameMaster.Instance.GetLevelController().UpdateIdleMailTargetStation();
+        lc.UpdateIdleMailTargetStation();
     }
 
     public void UpdateIndicator(Queue<Mail> mails) {
@@ -321,7 +327,7 @@ public class StationController : MonoBehaviour {
 
     public void UpgradeStation(int level) {
         // TODO: Animate effects;
-        GetComponent<SpriteRenderer>().sprite = GameMaster.Instance.GetLevelController().StationSprites[level];
+        GetComponent<SpriteRenderer>().sprite = lc.StationSprites[level];
 
         si.ResetCapacity(model.MailStorageLimit, model.IsHome ? new Vector3(-0.75f, -1f, 0.0f) : model.StorageIndicatorOffset);
     }
