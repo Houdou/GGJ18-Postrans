@@ -67,7 +67,7 @@ public class GameMaster : MonoBehaviour {
 
     // Use this for initialization
     void Awake() {
-        ScreenLogger = GameObject.Find("ScreenLogger").GetComponent<Text>();
+        //ScreenLogger = GameObject.Find("ScreenLogger").GetComponent<Text>();
         GameScene = GameScene.Level;
     }
 
@@ -96,4 +96,6 @@ public class GameMaster : MonoBehaviour {
             return null;
         }
     }
+
+    
 }
