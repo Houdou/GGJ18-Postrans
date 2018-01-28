@@ -51,7 +51,7 @@ public class MailArea : MonoBehaviour {
         randomY = (randomY > bound.y - radius) ? (randomY -= radius) : randomY;
         randomY = (randomY < (-1)*bound.y + radius) ? (randomY += radius) : randomY;
 
-        releaseHold = 5f + Random.Range(-1f, 1f) * 2;
+        releaseHold = 3f + Random.Range(-1f, 1f) * 2;
     
         PosX = randomX;
         PosY = randomY;
