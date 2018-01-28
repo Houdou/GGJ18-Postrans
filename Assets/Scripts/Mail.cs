@@ -34,6 +34,7 @@ public class Mail : MonoBehaviour {
     public Station TargetCollectStation;
     public Road TravellingRoad;
     public float RoadProgress;
+    public float TargetProgress;
 
     private void Awake() {
         lc = GameMaster.Instance.GetLevelController();
@@ -89,14 +90,16 @@ public class Mail : MonoBehaviour {
 
     public void MoveAloneRoad() {
         if(TravellingRoad != null) {
-            RoadProgress += MoveSpeed * Time.deltaTime / TravellingRoad.Length;
-            transform.position = TravellingRoad.GetCurvePosByProgress(RoadProgress);
+            if((TargetProgress - RoadProgress) * MoveSpeed > 0) {
+                RoadProgress += MoveSpeed * Time.deltaTime / TravellingRoad.Length;
+                transform.position = TravellingRoad.GetCurvePosByProgress(RoadProgress);
+            }            
         }
     }
 
     public void MoveAroundStation() {
         if(TargetCollectStation != null) {
-            MoveMail(TargetCollectStation.Pos + new Vector2(Mathf.Cos(Time.time + ID * 0.1f), -Mathf.Sin(Time.time + ID * 0.1f)) * 0.25f);
+            MoveMail(TargetCollectStation.Pos + new Vector2(Mathf.Cos(Time.time + ID * 0.1f), -Mathf.Sin(Time.time + ID * 0.1f)) * TargetCollectStation.OrbitRadius);
         }
     }
 
@@ -109,7 +112,8 @@ public class Mail : MonoBehaviour {
         TargetCollectStation = road.Next(from);
 
         RoadProgress = road.StationList[0] == from ? 0.0f : 1.0f;
-        MoveSpeed = speed * (road.StationList[0] == from ? 1.0f : -1.0f);
+        TargetProgress = 1 - RoadProgress;
+        MoveSpeed = speed * Mathf.Sign(TargetProgress - RoadProgress);
 
         IsTravelling = true;
     }
@@ -138,23 +142,28 @@ public class Mail : MonoBehaviour {
     }
 
     public void CheckAcceptance(Station station) {
-        if(Vector2.Distance(transform.position, station.Pos) < 0.3f) {
+        if(Vector2.Distance(transform.position, station.Pos) < 0.5f) {
             if(station.ID == TargetHome.ID) {
                 FadeOut();
                 IsAccepted = true;
                 IsArrived = true;
                 IsTravelling = false;
+
+                // TODO: Add money
+                // TODO: Play sound
+
             } else {
                 bool arriveStation = station.AddMail(this);
+                
+                if(!IsAccepted) {
+                    IsAccepted = true;
+                }
 
                 if(arriveStation) {
                     FadeOut();
                     IsTravelling = false;
-
-                    if(!IsAccepted) {
-                        IsAccepted = true;
-                    }
                 } else {
+                    IsTravelling = true;
                     MoveAroundStation();
                     // Waiting outside
                 }

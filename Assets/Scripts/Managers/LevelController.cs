@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum OperationMode {
     [Description("Null")] Null = 0,
@@ -287,9 +288,13 @@ public class LevelController : MonoBehaviour {
             GenerateCloud();
         }
 
+        TimeCounting(Time.time);
+        MoneyCounting(MoneyLeft);
+
     }
 
     public Vector2 ViewRange;
+    private float StartLevelTime;
 
     public void InitializeLevel() {
         // Limit the game view range
@@ -311,7 +316,7 @@ public class LevelController : MonoBehaviour {
                 }
                 pos = new Vector2(Random.Range(0.2f, 0.8f) * ViewRange.x, Random.Range(0.2f, 0.8f) * ViewRange.y);
                 pos -= ViewRange / 2.0f;
-            } while(minDist < GameMaster.MinimumHomeDistance && count++ < 100);
+            } while(minDist < GameMaster.MinimumHomeDistance && count++ < 20000);
 
             GameObject newHome = Instantiate(HomePrefab, pos, Quaternion.identity, HomeGroup.transform);
             newHome.transform.Find("Marker").GetComponent<SpriteRenderer>().sprite = Markers[i];
@@ -323,6 +328,7 @@ public class LevelController : MonoBehaviour {
             HomeList.Add(controller.model);
         }
 
+        StartLevelTime = Time.time;
 
     }
 
@@ -384,4 +390,36 @@ public class LevelController : MonoBehaviour {
     public void SendMailOp() {
         OperationMode = OperationMode.Null;
     }
+
+    public Text TimeLeftCounting;
+    public float GameTotalTime;
+
+    // Time Counting
+    public void TimeCounting(float curTime) {
+        float timePast = curTime - StartLevelTime;
+        float timeLeft = GameTotalTime - timePast;
+
+        if (timeLeft <= 0) {
+            return;
+        }
+
+        TimeLeftCounting.text = TimeFormating(timeLeft);
+    }
+
+    private string TimeFormating(float time) {
+        int minute = (int)(time / 60);
+        int second = (int)(time % 60);
+
+        string second_str = (second < 10) ? "0" + second : second.ToString();
+
+        return (minute + ":" + second_str);
+    }
+
+    public int MoneyLeft;
+    public Text MoneyLeftCounting;
+    // Money Counting
+    public void MoneyCounting(int sum) {
+        MoneyLeftCounting.text = sum.ToString();
+    }
+
 }
