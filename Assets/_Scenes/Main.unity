@@ -942,6 +942,10 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 1857955baeb78a94c86a85f9cc35cc42, type: 3}
   - {fileID: 21300000, guid: 2cfa14e30ac687a4ab3da7664b678e8f, type: 3}
   - {fileID: 21300000, guid: 8a5a2a72c1096b94086732fe07c0e05f, type: 3}
+  buildRoadAC: {fileID: 8300000, guid: e4d48c840e0de1c45a5b8bc86ce7d7c6, type: 3}
+  buildStationAC: {fileID: 8300000, guid: 8f0dedea25ac95b49aba993eb09b685a, type: 3}
+  sendMailAC: {fileID: 8300000, guid: 5d09b6b170d434f44af5e17902d5575e, type: 3}
+  upgradeAC: {fileID: 8300000, guid: 10d3008dd31c27041bbf84a9dfb43281, type: 3}
   MailList: []
   SmokePS: {fileID: 198937376949841626, guid: d328ed44ca0887b40a849a95641b9334, type: 2}
   FirePS: {fileID: 0}
@@ -1316,6 +1320,7 @@ GameObject:
   - component: {fileID: 1985574435}
   - component: {fileID: 1985574434}
   - component: {fileID: 1985574438}
+  - component: {fileID: 1985574439}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1400,6 +1405,86 @@ MonoBehaviour:
   DeltaZoom: 0
   StartTime: 0
   ZoomingTime: 0
+--- !u!82 &1985574439
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1985574433}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 4dbecdd7aa1f8434ba3e639bee7eebf0, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 0.1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
 --- !u!1 &2002618921
 GameObject:
   m_ObjectHideFlags: 0
@@ -1584,7 +1669,6 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 21300000, guid: 9377052fab5b411479ffa4f3912c459b, type: 3}
-  m_Sprite: {fileID: 21300000, guid: e353b68b7a2a78a49bd43954819a9009, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
