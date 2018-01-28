@@ -670,6 +670,10 @@ MonoBehaviour:
   - 0.5
   - 1
   - 2
+  SotrageIndicatorOffsetPerLevel:
+  - {x: -0.65, y: -0.8, z: 0}
+  - {x: -0.75, y: -0.9, z: 0}
+  - {x: -0.75, y: -1, z: 0}
   useScreenLogger: 0
   GameScene: 0
   ScreenLoggerHeader: 'DEBUG:
@@ -1579,6 +1583,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 21300000, guid: 9377052fab5b411479ffa4f3912c459b, type: 3}
   m_Sprite: {fileID: 21300000, guid: e353b68b7a2a78a49bd43954819a9009, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
