@@ -330,5 +330,6 @@ public class StationController : MonoBehaviour {
         GetComponent<SpriteRenderer>().sprite = lc.StationSprites[level];
 
         si.ResetCapacity(model.MailStorageLimit, model.IsHome ? new Vector3(-0.75f, -1f, 0.0f) : model.StorageIndicatorOffset);
+        si.UpdateColor(model.MailStorage);
     }
 }
