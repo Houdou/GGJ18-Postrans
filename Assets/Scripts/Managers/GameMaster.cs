@@ -60,6 +60,8 @@ public class GameMaster : MonoBehaviour {
 
     public int[] RoadCapacityPerLevel;
     public float[] MailRangePerLevel;
+    public int[] MailStoragePerLevel;
+    public float[] MailSpeedPerLevel;
 
     public bool useScreenLogger = true;
 
