@@ -8,3 +8,4 @@ Mail sent: http://osabisi.sakura.ne.jp/m2/
 mail received: http://osabisi.sakura.ne.jp/m2/
 Build Station: http://www.pacdv.com/sounds/mechanical_sound_effects/hammer-1.mp3
 Game Over: https://www.youtube.com/watch?v=na-a3lLB13Q
+Click2: http://www.pachd.com/a/button/button10.wav
