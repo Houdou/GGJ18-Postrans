@@ -7,6 +7,7 @@ public class Station {
     public static int IDCounter = -1;
     
     private GameObject station;
+    private StationController controller;
     public readonly int ID;
 
     public Vector2 Pos {
@@ -41,6 +42,12 @@ public class Station {
             return GameMaster.Instance.MailStoragePerLevel[limitedLevel];
         }
     }
+    public Vector3 StorageIndicatorOffset {
+        get {
+            int limitedLevel = Mathf.Min(GameMaster.Instance.SotrageIndicatorOffsetPerLevel.Length - 1, level);
+            return GameMaster.Instance.SotrageIndicatorOffsetPerLevel[limitedLevel];
+        }
+    }
     public float MailSpeed {
         get {
             int limitedLevel = Mathf.Min(GameMaster.Instance.MailSpeedPerLevel.Length - 1, level);
@@ -53,7 +60,7 @@ public class Station {
     public bool UpgradeStation() {
         if(level < GameMaster.MaxStationLevel) {
             level += 1;
-            station.GetComponent<StationController>().UpgradeStation(level);
+            controller.UpgradeStation(level);
             return true;
         } else {
             return false;
@@ -61,7 +68,8 @@ public class Station {
     }
 
     public Station(GameObject obj, bool isHome) {
-        station = obj;        
+        station = obj;
+        controller = station.GetComponent<StationController>();
         ID = ++IDCounter;
         IsHome = isHome;
 
@@ -187,7 +195,7 @@ public class Station {
 
         if(MailStorage.Count < MailStorageLimit) {
             MailStorage.Enqueue(mail);
-
+            controller.UpdateIndicator(MailStorage);
             // TODO: Mail animation
             return true;
         } else {
@@ -209,6 +217,7 @@ public class Station {
                 SendingQueue.Enqueue(mail);
             }
         }
+        controller.UpdateIndicator(MailStorage);
     }
 
     public void FillingMails() {
@@ -219,6 +228,7 @@ public class Station {
                 mail.FadeOut();
             MailStorage.Enqueue(mail);
         }
+        controller.UpdateIndicator(MailStorage);
     }
 
     public void SendMail() {
@@ -232,6 +242,7 @@ public class Station {
 public class StationController : MonoBehaviour {
     public Station model;
     public SpriteRenderer sprite;
+    public StorageIndicator si;
 
     public Color TargetColor;
 
@@ -240,6 +251,7 @@ public class StationController : MonoBehaviour {
     
     private void Awake() {
         sprite = GetComponent<SpriteRenderer>();
+        si = GetComponent<StorageIndicator>();
     }
 
     public Station Initialize(bool isHome) {
@@ -253,6 +265,8 @@ public class StationController : MonoBehaviour {
         } else {
             TargetColor = Color.white;
         }
+
+        si.ResetCapacity(model.MailStorageLimit, isHome ? new Vector3(-0.75f, -1f, 0.0f) : model.StorageIndicatorOffset);
 
         return model;
     }
@@ -289,6 +303,7 @@ public class StationController : MonoBehaviour {
                 model.SendMail();
                 if(model.SendingQueue.Count == 0) {
                     SendingCounter = 0.0f;
+                    UpdateIndicator(model.MailStorage);
                 }
             }
         }
@@ -300,8 +315,14 @@ public class StationController : MonoBehaviour {
         GameMaster.Instance.GetLevelController().UpdateIdleMailTargetStation();
     }
 
+    public void UpdateIndicator(Queue<Mail> mails) {
+        si.UpdateColor(mails);
+    }
+
     public void UpgradeStation(int level) {
         // TODO: Animate effects;
         GetComponent<SpriteRenderer>().sprite = GameMaster.Instance.GetLevelController().StationSprites[level];
+
+        si.ResetCapacity(model.MailStorageLimit, model.IsHome ? new Vector3(-0.75f, -1f, 0.0f) : model.StorageIndicatorOffset);
     }
 }

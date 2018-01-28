@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum OperationMode {
     [Description("Null")] Null = 0,
@@ -73,6 +74,11 @@ public class LevelController : MonoBehaviour {
     public Sprite[] Markers;
     public Sprite[] StationSprites;
 
+    public AudioClip buildRoadAC;
+    public AudioClip buildStationAC;
+    public AudioClip sendMailAC;
+    public AudioClip upgradeAC;
+
 
     private GameObject StationGroup;
     private GameObject RoadGroup;
@@ -95,6 +101,7 @@ public class LevelController : MonoBehaviour {
         if(endStation != null) {
             // Build road between start and end.
             BuildRoadBetween(startStation, endStation);
+            AudioSource.PlayClipAtPoint(buildRoadAC, pos);
         }
     }
 
@@ -102,6 +109,7 @@ public class LevelController : MonoBehaviour {
         Station s = FindStationNear(pos);
         if(s != null) {
             s.ProcessMails();
+            AudioSource.PlayClipAtPoint(sendMailAC, pos);
         }
     }
 
@@ -110,6 +118,7 @@ public class LevelController : MonoBehaviour {
         if(s != null && !s.IsHome) {
             if(s.UpgradeStation()) {
                 ParticleSystem Smoke = Instantiate(SmokePS, pos, Quaternion.identity);
+                AudioSource.PlayClipAtPoint(upgradeAC, pos);
                 Smoke.Play();
             }
 
@@ -171,7 +180,7 @@ public class LevelController : MonoBehaviour {
             Station station = controller.Initialize(false);
 
             StationList.Add(station);
-
+            AudioSource.PlayClipAtPoint(buildStationAC, pos);
             //TODO: Manage animator
             UpdateIdleMailTargetStation();
         } else {
@@ -279,9 +288,13 @@ public class LevelController : MonoBehaviour {
             GenerateCloud();
         }
 
+        TimeCounting(Time.time);
+        MoneyCounting(MoneyLeft);
+
     }
 
     public Vector2 ViewRange;
+    private float StartLevelTime;
 
     public void InitializeLevel() {
         // Limit the game view range
@@ -315,6 +328,7 @@ public class LevelController : MonoBehaviour {
             HomeList.Add(controller.model);
         }
 
+        StartLevelTime = Time.time;
 
     }
 
@@ -376,4 +390,36 @@ public class LevelController : MonoBehaviour {
     public void SendMailOp() {
         OperationMode = OperationMode.Null;
     }
+
+    public Text TimeLeftCounting;
+    public float GameTotalTime;
+
+    // Time Counting
+    public void TimeCounting(float curTime) {
+        float timePast = curTime - StartLevelTime;
+        float timeLeft = GameTotalTime - timePast;
+
+        if (timeLeft <= 0) {
+            return;
+        }
+
+        TimeLeftCounting.text = TimeFormating(timeLeft);
+    }
+
+    private string TimeFormating(float time) {
+        int minute = (int)(time / 60);
+        int second = (int)(time % 60);
+
+        string second_str = (second < 10) ? "0" + second : second.ToString();
+
+        return (minute + ":" + second_str);
+    }
+
+    public int MoneyLeft;
+    public Text MoneyLeftCounting;
+    // Money Counting
+    public void MoneyCounting(int sum) {
+        MoneyLeftCounting.text = sum.ToString();
+    }
+
 }
