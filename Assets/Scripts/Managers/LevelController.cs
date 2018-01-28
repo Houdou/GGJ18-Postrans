@@ -111,7 +111,7 @@ public class LevelController : MonoBehaviour {
         Station s = FindStationNear(pos);
         if(s != null) {
             if(s.ProcessMails()) {
-                MoneyLeft -= GameMaster.SendCost;
+                MoneyLeft -= GameMaster.Instance.SendCost;
             }
             AudioSource.PlayClipAtPoint(sendMailAC, pos);
         }
@@ -126,7 +126,7 @@ public class LevelController : MonoBehaviour {
                 Smoke.Play();
             }
 
-            MoneyLeft -= GameMaster.UpgradeCost;
+            MoneyLeft -= GameMaster.Instance.UpgradeCost;
             UpdateIdleMailTargetStation();
         }
     }
@@ -191,7 +191,7 @@ public class LevelController : MonoBehaviour {
             //TODO: Manage animator
             UpdateIdleMailTargetStation();
 
-            MoneyLeft -= GameMaster.StationCost;
+            MoneyLeft -= GameMaster.Instance.StationCost;
         } else {
             //TODO: Build error
         }
@@ -239,7 +239,7 @@ public class LevelController : MonoBehaviour {
             }
 
             //TODO: Manage animator
-            MoneyLeft -= GameMaster.RoadCost;
+            MoneyLeft -= GameMaster.Instance.RoadCost;
             UpdateNavigation();
         } else {
             //TODO: Build error
@@ -340,6 +340,8 @@ public class LevelController : MonoBehaviour {
 
             StationList.Add(controller.model);
             HomeList.Add(controller.model);
+
+            MoneyLeft = 500;
         }
 
         StartLevelTime = Time.time;

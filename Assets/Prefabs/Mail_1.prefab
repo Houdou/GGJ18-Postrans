@@ -121,14 +121,17 @@ MonoBehaviour:
   ID: 0
   prior: 0
   value: 10
-  bonus: 0
+  bonus: 5
+  AvailableTime: 30
   mailReceivedAC: {fileID: 8300000, guid: 5e39c328d637e9949978a84462ff974e, type: 3}
   IsAccepted: 0
   IsTravelling: 0
+  IsBurned: 0
   IsArrived: 0
   MoveSpeed: 1
   StartTime: 0
   RoadProgress: 0
+  TargetProgress: 0
 --- !u!212 &212365093295453434
 SpriteRenderer:
   m_ObjectHideFlags: 1

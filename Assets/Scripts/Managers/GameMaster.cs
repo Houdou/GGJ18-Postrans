@@ -57,15 +57,11 @@ public class GameMaster : MonoBehaviour {
     public static readonly float MinimumHomeDistance = 3.0f;
     [SerializeField]
     public static readonly float RoadMaxLength = 7.0f;
-
-    [SerializeField]
-    public static readonly int StationCost = 1;
-    [SerializeField]
-    public static readonly int RoadCost = 1;
-    [SerializeField]
-    public static readonly int UpgradeCost = 1;
-    [SerializeField]
-    public static readonly int SendCost = 1;
+    
+    public int StationCost = 200;
+    public int RoadCost = 10;
+    public int UpgradeCost = 200;
+    public int SendCost = 20;
 
     public int[] RoadCapacityPerLevel;
     public float[] MailRangePerLevel;

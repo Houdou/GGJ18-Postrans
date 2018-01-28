@@ -120,15 +120,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 0
   prior: 0
-  value: 50
-  bonus: 0
+  value: 30
+  bonus: 8
+  AvailableTime: 10
   mailReceivedAC: {fileID: 8300000, guid: 5e39c328d637e9949978a84462ff974e, type: 3}
   IsAccepted: 0
   IsTravelling: 0
+  IsBurned: 0
   IsArrived: 0
   MoveSpeed: 1
   StartTime: 0
   RoadProgress: 0
+  TargetProgress: 0
 --- !u!212 &212082533285289600
 SpriteRenderer:
   m_ObjectHideFlags: 1
