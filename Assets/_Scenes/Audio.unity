@@ -621,6 +621,7 @@ MonoBehaviour:
   - 1.5
   - 2
   - 2.5
+  OrbitRadiusPerLevel: []
   MailStoragePerLevel: 03000000050000000a000000
   MailSpeedPerLevel:
   - 0.5
@@ -860,7 +861,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 1857955baeb78a94c86a85f9cc35cc42, type: 3}
   - {fileID: 21300000, guid: 2cfa14e30ac687a4ab3da7664b678e8f, type: 3}
   - {fileID: 21300000, guid: 8a5a2a72c1096b94086732fe07c0e05f, type: 3}
-  buildRoadAC: {fileID: 8300000, guid: 8f0dedea25ac95b49aba993eb09b685a, type: 3}
+  buildRoadAC: {fileID: 8300000, guid: e4d48c840e0de1c45a5b8bc86ce7d7c6, type: 3}
   buildStationAC: {fileID: 8300000, guid: 8f0dedea25ac95b49aba993eb09b685a, type: 3}
   sendMailAC: {fileID: 8300000, guid: 5d09b6b170d434f44af5e17902d5575e, type: 3}
   upgradeAC: {fileID: 8300000, guid: 10d3008dd31c27041bbf84a9dfb43281, type: 3}
@@ -873,6 +874,10 @@ MonoBehaviour:
   MailArea: {fileID: 1808656730641010, guid: f2141539a538fc64ebbae3b7ae43d29a, type: 2}
   MailAreas: []
   Bound: {x: 0, y: 0}
+  TimeLeftCounting: {fileID: 0}
+  GameTotalTime: 0
+  MoneyLeft: 0
+  MoneyLeftCounting: {fileID: 0}
 --- !u!4 &1031602465
 Transform:
   m_ObjectHideFlags: 0
