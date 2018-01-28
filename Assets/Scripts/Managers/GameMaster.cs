@@ -60,6 +60,7 @@ public class GameMaster : MonoBehaviour {
 
     public int[] RoadCapacityPerLevel;
     public float[] MailRangePerLevel;
+    public float[] OrbitRadiusPerLevel;
     public int[] MailStoragePerLevel;
     public float[] MailSpeedPerLevel;
 
@@ -71,6 +72,10 @@ public class GameMaster : MonoBehaviour {
     void Awake() {
         ScreenLogger = GameObject.Find("ScreenLogger").GetComponent<Text>();
         GameScene = GameScene.Level;
+
+        if(Instance == this) {
+            DontDestroyOnLoad(gameObject);
+        }
     }
 
     // Update is called once per frame

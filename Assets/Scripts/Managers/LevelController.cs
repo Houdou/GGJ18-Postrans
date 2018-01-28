@@ -303,7 +303,7 @@ public class LevelController : MonoBehaviour {
                 }
                 pos = new Vector2(Random.Range(0.2f, 0.8f) * ViewRange.x, Random.Range(0.2f, 0.8f) * ViewRange.y);
                 pos -= ViewRange / 2.0f;
-            } while(minDist < GameMaster.MinimumHomeDistance && count++ < 100);
+            } while(minDist < GameMaster.MinimumHomeDistance && count++ < 20000);
 
             GameObject newHome = Instantiate(HomePrefab, pos, Quaternion.identity, HomeGroup.transform);
             newHome.transform.Find("Marker").GetComponent<SpriteRenderer>().sprite = Markers[i];

@@ -213,7 +213,11 @@ MonoBehaviour:
   - 1.5
   - 2
   - 2.5
-  MailStoragePerLevel: 03000000050000000a000000
+  OrbitRadiusPerLevel:
+  - 0.4
+  - 0.44
+  - 0.48
+  MailStoragePerLevel: 050000000800000014000000
   MailSpeedPerLevel:
   - 0.5
   - 1
@@ -508,7 +512,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.91372555, g: 0.8705883, b: 0.5764706, a: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
